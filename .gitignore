@@ -1,2 +1,4 @@
 .DS_Store
 .idea
+postgres/.env
+back/.env
