@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
-
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import HomePage from './components/HomePage.jsx'
+import HomePage from './components/HomePage'
+import Navbar from './components/Navbar'
 
 function App() {
   return (
-    <React.Fragment>
+    <div id="app">
+      <Navbar />
       <Router>
         <Route path="/">
           <HomePage />
         </Route>
       </Router>
       <ToastContainer />
-
-    </React.Fragment>
+    </div>
   );
 }
 
