@@ -24,6 +24,7 @@ class ICAComponent(models.Model):
     sfreq = models.FloatField()
     uploaded_by = models.ForeignKey(User, related_name='ics', on_delete=models.SET_NULL, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    images_calculated = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('name', 'subject', 'dataset')
@@ -39,3 +40,25 @@ class ICAComponent(models.Model):
 
     def get_ica_data(self):
         return pd.DataFrame(self.ica_data)
+
+
+class ICAImages(models.Model):
+    ic = models.OneToOneField(ICAComponent, related_name='images', on_delete=models.CASCADE)
+    img_topomap = models.ImageField(upload_to='images/')
+
+
+class Annotation(models.Model):
+    component = models.ForeignKey(ICAComponent, models.PROTECT)
+    flag_brain = models.BooleanField(default=False)
+    flag_eyes = models.BooleanField(default=False)
+    flag_muscles = models.BooleanField(default=False)
+    flag_hearth = models.BooleanField(default=False)
+    flag_line_noise = models.BooleanField(default=False)
+    flag_ch_noise = models.BooleanField(default=False)
+    comment = models.TextField(default='')
+
+
+class DatasetStats(models.Model):
+    dataset = models.OneToOneField(Dataset, related_name='stats', on_delete=models.CASCADE)
+    n_components = models.IntegerField(default=0)
+    agreement = models.FloatField(default=0)
