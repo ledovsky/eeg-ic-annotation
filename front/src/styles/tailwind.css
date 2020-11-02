@@ -596,6 +596,17 @@ body {
   background-color: rgba(247, 250, 252, var(--bg-opacity));
 }
 
+html, body {
+  min-height: 100%;
+  height: 100%;
+}
+
+html {
+  --text-opacity: 1;
+  color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
+}
+
 .container {
   width: 100%;
 }
@@ -22788,6 +22799,12 @@ body {
 .animate-bounce {
   -webkit-animation: bounce 1s infinite;
           animation: bounce 1s infinite;
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 640px) {

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 function NavbarItemMain(props) {
   return (
-    <li>
+    <li className="ml-6">
       <a className="text-indigo-500 hover:text-indigo-600 font-bold" href="#">{props.children}</a>
     </li>
   )
@@ -25,7 +25,7 @@ function Navbar() {
     <React.Fragment>
       <div className="py-5 px-2">
         <ul className="flex">
-          <NavbarItemMain>Skoltech Project</NavbarItemMain>
+          <NavbarItemMain>Skoltech/IHNA EEG ICA</NavbarItemMain>
           <NavbarItem margin>Explore</NavbarItem>
           <NavbarItem>About</NavbarItem>
           <NavbarItem>Downloads</NavbarItem>

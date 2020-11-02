@@ -4,18 +4,22 @@ import { ToastContainer } from 'react-toastify';
 
 import HomePage from './components/HomePage'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 function App() {
   return (
-    <div id="app">
-      <Navbar />
-      <Router>
-        <Route path="/">
-          <HomePage />
-        </Route>
-      </Router>
-      <ToastContainer />
-    </div>
+    <React.Fragment>
+      <div className="flex-auto">
+        <Navbar />
+        <Router>
+          <Route path="/">
+            <HomePage />
+          </Route>
+        </Router>
+        <ToastContainer />
+      </div>
+      <Footer/>
+    </React.Fragment>
   );
 }
 
