@@ -26,7 +26,8 @@ function Navbar() {
       <div className="py-5 px-2">
         <ul className="flex">
           <NavbarItemMain>Skoltech/IHNA EEG ICA</NavbarItemMain>
-          <NavbarItem to="/" margin>Explore</NavbarItem>
+          <NavbarItem to="/" margin></NavbarItem>
+          <NavbarItem to="/">Explore datasets</NavbarItem>
           <NavbarItem to="/">About</NavbarItem>
           <NavbarItem to="/">Downloads</NavbarItem>
           <NavbarItem to="/login">Login To Annotation Tool</NavbarItem>

@@ -6,6 +6,8 @@ import HomePage from './components/HomePage'
 import Login from './components/Login'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Datasets from './containers/DatasetsContainer'
+import DatasetView from './components/DatasetView'
 
 function App() {
   return (
@@ -18,6 +20,12 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route exact path="/datasets">
+            <Datasets />
+          </Route>
+          <Route exact path="/datasets/:dataset_name">
+            <DatasetView />
           </Route>
         </Router>
         <ToastContainer />
