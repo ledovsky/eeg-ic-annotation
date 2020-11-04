@@ -57,8 +57,7 @@ class DatasetStatsSerializer(serializers.ModelSerializer):
 
 class DatasetSerializer(serializers.ModelSerializer):
 
-    stats = DatasetStatsSerializer()
-
+    stats = DatasetStatsSerializer(read_only=True)
     class Meta:
         model = Dataset
-        fields = ('short_name', 'full_name', 'stats')
+        fields = ('id', 'short_name', 'full_name', 'stats')
