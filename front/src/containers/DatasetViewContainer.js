@@ -10,11 +10,9 @@ function DatasetViewContainer(props) {
   const [ ics, setDatasets ] = useState([])
 
   useEffect(async () => {
-    let res = await Api.getMany('datasets', { short_name: dataset_name})
-    console.log(res)
+    let res = await Api.getJson('datasets', { short_name: dataset_name}, [])
     let [ dataset ] = res;
-    console.log(dataset)
-    let collection = await Api.getMany('ica', { dataset: dataset.id})
+    let collection = await Api.getJson('ica', { dataset: dataset.id}, [])
     setDatasets(collection)
   }, [ params ]);
 

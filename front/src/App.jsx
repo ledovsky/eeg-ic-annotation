@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { ToastContainer } from 'react-toastify';
 
 import HomePage from './components/HomePage'
-import Login from './components/Login'
-import Navbar from './components/Navbar'
+import Login from './containers/LoginContainer'
+import Navbar from './containers/NavbarContainer'
 import Footer from './components/Footer'
 import Datasets from './containers/DatasetsContainer'
 import DatasetView from './containers/DatasetViewContainer'
@@ -14,8 +14,8 @@ function App() {
   return (
     <React.Fragment>
       <div className="flex-auto">
-        <Navbar />
         <Router>
+          <Navbar />
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route path="/login">

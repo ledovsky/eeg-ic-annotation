@@ -10,7 +10,7 @@ function NavbarItemMain(props) {
 function NavbarItem(props) {
   return (
     <li className={`mr-6 ${props.margin ? 'ml-auto' : ''}`}>
-      <a className="text-gray-700 hover:text-gray-800" href={`${props.to}`}>{props.children}</a>
+      <a className="text-gray-700 hover:text-gray-800" href={`${props.to}`} onClick={props.onClick}>{props.children}</a>
     </li>
   )
 }
@@ -20,7 +20,7 @@ NavbarItem.defaultProps = {
   bold: false
 };
 
-function Navbar() {
+function Navbar(props) {
   return (
     <React.Fragment>
       <div className="py-5 px-2">
@@ -30,7 +30,15 @@ function Navbar() {
           <NavbarItem to="/datasets">Explore datasets</NavbarItem>
           <NavbarItem to="/">About</NavbarItem>
           <NavbarItem to="/">Downloads</NavbarItem>
-          <NavbarItem to="/login">Login To Annotation Tool</NavbarItem>
+          { props.loggedIn ?
+            <NavbarItem key="logout" href="#" onClick={props.handleLogout}>{props.fullName}: Logout</NavbarItem>
+
+            // <li className="mr-6">
+            //   <a className="text-gray-700 hover:text-gray-800" href="" onClick={props.handleLogout}>{props.fullName}: Logout</a>
+            // </li>
+            :
+            <NavbarItem key="login" to="/login">Login To Annotation Tool</NavbarItem>
+          }
         </ul>
       </div>
       <hr className="mb-5"/>

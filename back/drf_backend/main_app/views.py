@@ -20,7 +20,8 @@ class APIRootView(APIView):
     def get(self, request):
         data = {
             'ica': reverse('ica-list', request=request),
-            'datasets': reverse('dataset-list', request=request)
+            'datasets': reverse('dataset-list', request=request),
+            'auth': reverse('auth', request=request)
         }
         return Response(data)
 
@@ -52,5 +53,9 @@ class ResetDatasetView(View):
 
 
 class AnnotationView():
+    pass
+
+
+class UserView(generics.RetrieveAPIView):
     pass
 
