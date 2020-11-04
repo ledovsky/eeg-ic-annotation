@@ -8,6 +8,9 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import ICAListSerializer, DatasetSerializer
 from .models import ICAComponent, Dataset
@@ -24,9 +27,10 @@ class APIRootView(APIView):
 
 class ICAListView(generics.ListCreateAPIView):
     serializer_class = ICAListSerializer
-
-    def get_queryset(self):
-        return ICAComponent.objects.all()
+    queryset = ICAComponent.objects.all()
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['dataset']
+    search_fields = ['name', 'subject']
 
     def perform_create(self, serializer):
         user = None
@@ -38,6 +42,8 @@ class ICAListView(generics.ListCreateAPIView):
 class DatasetListView(generics.ListAPIView):
     serializer_class = DatasetSerializer
     queryset = Dataset.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['short_name']
 
 
 class ResetDatasetView(View):

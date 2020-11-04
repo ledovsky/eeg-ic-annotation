@@ -9,9 +9,7 @@ function Datasets(props) {
 
   useEffect(async () => {
     // Update the document title using the browser API      
-    console.log(Api)
     let collection = await Api.getMany('datasets', {})
-    console.log(collection)
     setDatasets(collection)
   }, [ params ]);
 

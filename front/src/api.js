@@ -6,27 +6,16 @@ class Api {
   url = 'http://localhost:8000/api/'
 
   async getMany (path, params) {
-    path = this.url + path
-    console.log(params)
-    path = isEmpty(params) ? path : ('/?' + queryString.stringify(params))
-    console.log("pre get " + path)
-    let response = await fetch(path, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    console.log(response)
-    if (response.ok) {
-      let collection = await response.json()
-      return collection
-    } else {
-      toast.error("Error in " + path + "; Status " + response.status.toString())
-      return []
-    }
+    return this.get(path, params, [])
   }
   
   async getOne (path, params) {
-    path = this.url + '/?' + queryString.stringify(params)
+    return this.get(path, params, {})
+  }
+
+  async get (path, params, valueIfError) {
+    path = this.url + path
+    path = isEmpty(params) ? path : (path + '?' + queryString.stringify(params))
     let response = await fetch(path, {
       headers: {
         "Content-Type": "application/json"
@@ -37,7 +26,7 @@ class Api {
       return item
     } else {
       toast.error("Error in " + path + "; Status " + response.status.toString())
-      return {}
+      return valueIfError
     }
   }
 

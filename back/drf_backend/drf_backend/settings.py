@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_filters',
     'main_app'
 ]
 
@@ -137,3 +138,7 @@ MEDIA_ROOT = join(BASE_DIR, 'media')
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}

@@ -24,7 +24,7 @@ class ICAListSerializer(serializers.ModelSerializer):
                   'uploaded_at')
 
         read_only_fields = ('uploaded_by', 'uploaded_at')
-        write_only_fields = ('ica_weights', 'ica_data')
+        extra_kwargs = {'ica_weights': {'write_only': True}, 'ica_data': {'write_only': True}}
 
 
 class ICADetailedSerializer(serializers.ModelSerializer):

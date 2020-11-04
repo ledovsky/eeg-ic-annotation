@@ -7,7 +7,7 @@ import Login from './components/Login'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Datasets from './containers/DatasetsContainer'
-import DatasetView from './components/DatasetView'
+import DatasetView from './containers/DatasetViewContainer'
 import NotFound from './components/NotFound'
 
 function App() {
