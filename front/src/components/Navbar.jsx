@@ -27,7 +27,7 @@ function Navbar() {
         <ul className="flex">
           <NavbarItemMain>Skoltech/IHNA EEG ICA</NavbarItemMain>
           <NavbarItem to="/" margin></NavbarItem>
-          <NavbarItem to="/">Explore datasets</NavbarItem>
+          <NavbarItem to="/datasets">Explore datasets</NavbarItem>
           <NavbarItem to="/">About</NavbarItem>
           <NavbarItem to="/">Downloads</NavbarItem>
           <NavbarItem to="/login">Login To Annotation Tool</NavbarItem>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import HomePage from './components/HomePage'
@@ -8,6 +8,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Datasets from './containers/DatasetsContainer'
 import DatasetView from './components/DatasetView'
+import NotFound from './components/NotFound'
 
 function App() {
   return (
@@ -15,18 +16,22 @@ function App() {
       <div className="flex-auto">
         <Navbar />
         <Router>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/datasets">
-            <Datasets />
-          </Route>
-          <Route exact path="/datasets/:dataset_name">
-            <DatasetView />
-          </Route>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/datasets">
+              <Datasets />
+            </Route>
+            <Route exact path="/datasets/:dataset_name">
+              <DatasetView />
+            </Route>
+            <Route exact path="/404">
+              <NotFound />
+            </Route>
+            <Redirect to="/404" />
+          </Switch>
         </Router>
         <ToastContainer />
       </div>
