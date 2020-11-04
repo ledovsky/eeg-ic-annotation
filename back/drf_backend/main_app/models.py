@@ -13,16 +13,24 @@ from django.contrib.auth.models import User
 class Dataset(models.Model):
     short_name = models.CharField(max_length=20, unique=True)
     full_name = models.CharField(max_length=128)
+    locked = models.BooleanField(unique=False, default=False)
+
+    def reset(self):
+        if not self.locked:
+            ics = self.ics.all()
+            ics.delete()
+        else:
+            raise Exception('Model is locked')
 
 
 class ICAComponent(models.Model):
     name = models.CharField(max_length=128)
     subject = models.CharField(max_length=128)
-    dataset = models.ForeignKey(Dataset, models.PROTECT)
+    dataset = models.ForeignKey(Dataset, related_name='ics', on_delete=models.PROTECT)
     ica_weights = models.JSONField()
     ica_data = models.JSONField()
     sfreq = models.FloatField()
-    uploaded_by = models.ForeignKey(User, related_name='ics', on_delete=models.SET_NULL, null=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     images_calculated = models.BooleanField(default=False)
 
@@ -62,3 +70,21 @@ class DatasetStats(models.Model):
     dataset = models.OneToOneField(Dataset, related_name='stats', on_delete=models.CASCADE)
     n_components = models.IntegerField(default=0)
     agreement = models.FloatField(default=0)
+
+    class Meta:
+        verbose_name_plural = 'DatasetStats'
+
+    @staticmethod
+    def update_stats():
+        datasets = Dataset.objects.all()
+        for dataset in datasets:
+            if not hasattr(dataset, 'stats'):
+                stat_obj = DatasetStats(dataset=dataset)
+                stat_obj.save()
+        stats = DatasetStats.objects.all()
+        for stat_obj in stats:
+            n_components = 0
+            if hasattr(stat_obj.dataset, 'ics'):
+                n_components = len(stat_obj.dataset.ics.all())
+            stat_obj.n_components = n_components
+            stat_obj.save()

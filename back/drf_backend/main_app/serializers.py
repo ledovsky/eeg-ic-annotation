@@ -1,10 +1,33 @@
 from rest_framework import serializers
 
-from .models import ICAComponent, Dataset
+from .models import ICAComponent, Dataset, DatasetStats
 
 
-class ICASerializer(serializers.ModelSerializer):
+class ICAListSerializer(serializers.ModelSerializer):
 
+    dataset = serializers.SlugRelatedField(
+        many=False,
+        slug_field='short_name',
+        queryset=Dataset.objects.all()
+    )
+
+    class Meta:
+        model = ICAComponent
+        fields = ('id',
+                  'name',
+                  'subject',
+                  'dataset',
+                  'sfreq',
+                  'ica_weights',
+                  'ica_data',
+                  'uploaded_by',
+                  'uploaded_at')
+
+        read_only_fields = ('uploaded_by', 'uploaded_at')
+        write_only_fields = ('ica_weights', 'ica_data')
+
+
+class ICADetailedSerializer(serializers.ModelSerializer):
     dataset = serializers.SlugRelatedField(
         many=False,
         slug_field='short_name',
@@ -26,8 +49,16 @@ class ICASerializer(serializers.ModelSerializer):
         read_only_fields = ('uploaded_by', 'uploaded_at')
 
 
+class DatasetStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DatasetStats
+        fields = ('dataset', 'n_components', 'agreement')
+
+
 class DatasetSerializer(serializers.ModelSerializer):
+
+    stats = DatasetStatsSerializer()
 
     class Meta:
         model = Dataset
-        fields = ('short_name', 'full_name')
+        fields = ('short_name', 'full_name', 'stats')

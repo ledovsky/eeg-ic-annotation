@@ -5,6 +5,7 @@ from main_app import views
 urlpatterns = [
     path('', views.APIRootView.as_view()),
     path('ica', views.ICAListView.as_view(), name='ica-list'),
+    path('datasets', views.DatasetListView.as_view(), name='dataset-list'),
     # path('ic/<int:pk>/', views.ICView.as_view(), name='ic-view'),
 ]
 
