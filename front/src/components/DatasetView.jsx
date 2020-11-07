@@ -2,7 +2,7 @@ function DatasetView (props) {
   const rows = props.ics.map((ic) =>
     <tr key={ic.id.toString()}>
       <td className="border px-4 py-2">{ic.subject}</td>
-      <td className="border px-4 py-2"><a className="text-indigo-500" href={`/ica/${ic.id}`}>{ic.name}</a></td>
+      <td className="border px-4 py-2"><a className="text-indigo-500" href={`/ic/${ic.id}/annotate`}>{ic.name}</a></td>
     </tr>
   );
   return (

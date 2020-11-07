@@ -56,14 +56,18 @@ class ICAImages(models.Model):
 
 
 class Annotation(models.Model):
-    component = models.ForeignKey(ICAComponent, models.PROTECT)
+    ic = models.ForeignKey(ICAComponent, models.PROTECT, null=False)
+    user = models.ForeignKey(User, models.PROTECT, null=False)
     flag_brain = models.BooleanField(default=False)
     flag_eyes = models.BooleanField(default=False)
     flag_muscles = models.BooleanField(default=False)
-    flag_hearth = models.BooleanField(default=False)
+    flag_heart = models.BooleanField(default=False)
     flag_line_noise = models.BooleanField(default=False)
     flag_ch_noise = models.BooleanField(default=False)
-    comment = models.TextField(default='')
+    comment = models.TextField(default='', blank=True)
+
+    class Meta:
+        unique_together = ('ic', 'user', )
 
 
 class DatasetStats(models.Model):

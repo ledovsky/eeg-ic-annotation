@@ -13,10 +13,15 @@
   html {
     @apply text-gray-900;
   }
+
+  #root {
+    @apply min-h-full;
+    @apply flex;
+    @apply flex-col;
+  }
 }
 
-#root {
-  @apply min-h-full;
-  @apply flex;
-  @apply flex-col;
+.form-checkbox:focus {
+  box-shadow: none;
+  border-color: inherit;
 }

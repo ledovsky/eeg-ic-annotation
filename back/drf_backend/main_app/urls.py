@@ -4,10 +4,12 @@ from main_app import views
 
 urlpatterns = [
     path('', views.APIRootView.as_view()),
-    path('ica', views.ICAListView.as_view(), name='ica-list'),
+    path('ic', views.ICAListView.as_view(), name='ic-list'),
+    path('ic/<int:pk>', views.ICADetailedView.as_view(), name='ic'),
+    path('user-annotation', views.UserAnnotationView.as_view(), name='user-annotation'),
+    path('annotations', views.AnnotationListView.as_view(), name='annotations-list'),
+    path('annotations/<int:pk>', views.AnnotationDetailedView.as_view(), name='annotations'),
     path('datasets', views.DatasetListView.as_view(), name='dataset-list'),
-    # path('datasets/<int:pk>', views.DatasetDetailedView.as_view(), name='dataset-detailed'),
-    # path('ic/<int:pk>/', views.ICView.as_view(), name='ic-view'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

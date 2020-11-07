@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ICAComponent, Dataset, DatasetStats
+from .models import ICAComponent, Dataset, DatasetStats, Annotation
 
 
 class ICAListSerializer(serializers.ModelSerializer):
@@ -63,3 +63,8 @@ class DatasetSerializer(serializers.ModelSerializer):
         fields = ('id', 'short_name', 'full_name', 'stats')
 
 
+class AnnotationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Annotation
+        fields = '__all__'
+        read_only_fields = ('user', )
