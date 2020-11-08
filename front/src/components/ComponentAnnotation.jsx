@@ -1,5 +1,6 @@
 import { React } from 'react';
-import Button from "../common/Button";
+import AnnotationBar from './AnnotationBar';
+import Button from '../common/Button';
 
 
 function CheckboxField( props ) {
@@ -16,12 +17,7 @@ function CheckboxField( props ) {
 function ComponentAnnotation( props ) {
   return (
     <div>
-      <div className="mx-6 flex">
-        <p className="text-indigo-500 hover:text-indigo-600"><a href="">Dataset 1</a> / <a href="">ICA001</a></p>
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6"><a href="">Annotations</a></p>
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6"><a href="">Next</a></p>
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6"><a href="">Previous</a></p>
-      </div>
+      <AnnotationBar ic={props.ic} state="annotation"/>
       <div className="mx-6 mt-6 flex">
         <div className="w-full max-w-sm">
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

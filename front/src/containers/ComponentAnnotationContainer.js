@@ -52,7 +52,7 @@ function ComponentAnnotationContainer( props ) {
 
 
   return (
-    <ComponentAnnotation onChange={handleInputChange} onSubmit={submit} ic={ic}/>    
+    <ComponentAnnotation ic={ic} onChange={handleInputChange} onSubmit={submit} ic={ic}/>    
   )
 }
 

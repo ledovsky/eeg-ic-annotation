@@ -84,6 +84,7 @@ class UserAnnotationView(generics.RetrieveAPIView):
 class AnnotationListView(generics.ListCreateAPIView):
     serializer_class = AnnotationSerializer
     queryset = Annotation.objects.all()
+    filterset_fields = ['ic_id']
 
     def perform_create(self, serializer):
         print('perform create')

@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import ICAComponent, Dataset, DatasetStats, Annotation, ICAImages
@@ -11,6 +13,9 @@ class ICAListSerializer(serializers.ModelSerializer):
         queryset=Dataset.objects.all()
     )
 
+    is_annotated = serializers.SerializerMethodField()
+    annotation = serializers.SerializerMethodField()
+
     class Meta:
         model = ICAComponent
         fields = ('id',
@@ -21,10 +26,28 @@ class ICAListSerializer(serializers.ModelSerializer):
                   'ica_weights',
                   'ica_data',
                   'uploaded_by',
-                  'uploaded_at')
+                  'uploaded_at',
+                  'annotation',
+                  'is_annotated')
 
-        read_only_fields = ('uploaded_by', 'uploaded_at')
+        read_only_fields = ('uploaded_by', 'uploaded_at', 'is_annotated', 'annotation')
         extra_kwargs = {'ica_weights': {'write_only': True}, 'ica_data': {'write_only': True}}
+
+    def get_is_annotated(self, obj):
+        user = self.context['request'].user
+        try:
+            Annotation.objects.get(ic=obj.id, user=user)
+            return True
+        except ObjectDoesNotExist:
+            return False
+
+    def get_annotation(self, obj):
+        user = self.context['request'].user
+        try:
+            annotation = Annotation.objects.get(ic=obj.id, user=user)
+            return AnnotationSerializer(annotation).data
+        except ObjectDoesNotExist:
+            return {}
 
 
 class ICAImagesSerializer(serializers.ModelSerializer):
@@ -70,6 +93,12 @@ class DatasetSerializer(serializers.ModelSerializer):
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        many=False,
+        slug_field='username',
+        queryset=User.objects.all()
+    )
+
     class Meta:
         model = Annotation
         fields = '__all__'
