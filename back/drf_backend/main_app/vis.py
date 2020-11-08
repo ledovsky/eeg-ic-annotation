@@ -25,7 +25,8 @@ def _get_epochs_from_df(ica_data):
 
 def plot_epochs_image(ica_data):
     epochs_from_df = _get_epochs_from_df(ica_data)
-    return mne.viz.epochs.plot_epochs_image(epochs_from_df, picks=[0], title="", combine=None, colorbar=False, show=False)
+    return mne.viz.epochs.plot_epochs_image(epochs_from_df, picks=[0], title="",
+                                            combine=None, colorbar=False, show=False)[0]
 
 
 def plot_topomap(ica_component, ch_names):

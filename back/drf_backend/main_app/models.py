@@ -10,7 +10,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from main_app.vis import plot_topomap
+from main_app.vis import plot_topomap, plot_epochs_image, plot_spectrum
 
 
 # Create your models here.
@@ -57,7 +57,9 @@ class ICAComponent(models.Model):
 
 class ICAImages(models.Model):
     ic = models.OneToOneField(ICAComponent, null=False, related_name='images', on_delete=models.CASCADE)
-    img_topomap = models.ImageField(upload_to='images/')
+    img_topomap = models.ImageField(upload_to='images/', null=True)
+    img_spectrum = models.ImageField(upload_to='images/', null=True)
+    img_epochs_image = models.ImageField(upload_to='images/', null=True)
 
     def run_img_build(self):
         df_weights = self.ic.get_ica_weights()
@@ -66,6 +68,17 @@ class ICAImages(models.Model):
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
         self.img_topomap.save('topomap.png', ContentFile(buf.getvalue()))
+
+        fig = plot_spectrum(df_data, self.ic.sfreq)
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        self.img_spectrum.save('spectrum.png', ContentFile(buf.getvalue()))
+
+        fig = plot_epochs_image(df_data)
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        self.img_epochs_image.save('epochs_image.png', ContentFile(buf.getvalue()))
+
         self.save()
 
     @staticmethod

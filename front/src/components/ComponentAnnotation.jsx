@@ -45,6 +45,18 @@ function ComponentAnnotation( props ) {
             <img src={props.ic.images.img_topomap} alt=""/> : <div></div>
           }
         </div>
+        <div className="w-full px-6 max-w-md">
+          <p className="text-center font-bold">Spectrum</p>
+          { props.ic.images ?
+            <img src={props.ic.images.img_spectrum} alt=""/> : <div></div>
+          }
+        </div>
+        <div className="w-full px-6 max-w-md">
+          <p className="text-center font-bold">Epochs image</p>
+          { props.ic.images ?
+            <img src={props.ic.images.img_epochs_image} alt=""/> : <div></div>
+          }
+        </div>
       </div>
     </div>
   )
