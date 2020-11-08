@@ -9,6 +9,7 @@ import Footer from './components/Footer'
 import Datasets from './containers/DatasetsContainer'
 import DatasetView from './containers/DatasetViewContainer'
 import ComponentAnnotation from './containers/ComponentAnnotationContainer'
+import AnnotationList from './containers/AnnotationListContainer'
 import NotFound from './components/NotFound'
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
             <Route exact path="/datasets/:dataset_name">
               <DatasetView />
             </Route>
-            {/* <Route exact path="/ic/:ic_id/" component={ComponentAnnotation} /> */}
+            <Route exact path="/ic/:ic_id/" component={AnnotationList} />
             <Route exact path="/ic/:ic_id/annotate" component={ComponentAnnotation} />
             <Route exact path="/404">
               <NotFound />
