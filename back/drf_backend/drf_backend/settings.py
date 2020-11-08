@@ -135,6 +135,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+TMP_DIR = join(BASE_DIR, 'tmp')
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'

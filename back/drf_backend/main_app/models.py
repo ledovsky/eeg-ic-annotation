@@ -1,4 +1,6 @@
 from io import StringIO
+import io
+from os.path import join
 
 import pandas as pd
 
@@ -6,6 +8,9 @@ from django.db import models
 from django.core.files.base import ContentFile
 # from django.core.exceptions import FieldError
 from django.contrib.auth.models import User
+from django.conf import settings
+
+from main_app.vis import plot_topomap, plot_epochs_image, plot_spectrum
 
 
 # Create your models here.
@@ -51,8 +56,44 @@ class ICAComponent(models.Model):
 
 
 class ICAImages(models.Model):
-    ic = models.OneToOneField(ICAComponent, related_name='images', on_delete=models.CASCADE)
-    img_topomap = models.ImageField(upload_to='images/')
+    ic = models.OneToOneField(ICAComponent, null=False, related_name='images', on_delete=models.CASCADE)
+    img_topomap = models.ImageField(upload_to='images/', null=True)
+    img_spectrum = models.ImageField(upload_to='images/', null=True)
+    img_epochs_image = models.ImageField(upload_to='images/', null=True)
+
+    def run_img_build(self):
+        df_weights = self.ic.get_ica_weights()
+        df_data = self.ic.get_ica_data()
+        fig = plot_topomap(df_weights['value'].values, df_weights['ch_name'].values)
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        self.img_topomap.save('topomap.png', ContentFile(buf.getvalue()))
+
+        fig = plot_spectrum(df_data, self.ic.sfreq)
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        self.img_spectrum.save('spectrum.png', ContentFile(buf.getvalue()))
+
+        fig = plot_epochs_image(df_data)
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        self.img_epochs_image.save('epochs_image.png', ContentFile(buf.getvalue()))
+
+        self.save()
+
+    @staticmethod
+    def update_images(dataset_short_name=None):
+        ics = ICAComponent.objects.all()
+        if dataset_short_name:
+            ics = ics.filter(dataset__short_name=dataset_short_name)
+
+        for ic in ics:
+            if not hasattr(ic, 'images'):
+                ic_img = ICAImages(ic=ic)
+                ic_img.save()
+            else:
+                ic_img = ic.images
+            ic_img.run_img_build()
 
 
 class Annotation(models.Model):

@@ -4,9 +4,9 @@ import Button from "../common/Button";
 
 function CheckboxField( props ) {
   return (
-        <div class="flex mt-6">
-            <label class="flex items-center">
-              <input type="checkbox" class="form-checkbox" name={props.name} onChange={props.onChange}/>
+        <div className="flex mt-6">
+            <label className="flex items-center">
+              <input type="checkbox" className="form-checkbox" name={props.name} onChange={props.onChange}/>
                 <span class="ml-2">{props.children}</span>
             </label>
         </div>
@@ -38,6 +38,24 @@ function ComponentAnnotation( props ) {
               <Button onClick={props.onSubmit}>Save</Button>
             </div>
           </form>
+        </div>
+        <div className="w-full px-6 max-w-md">
+          <p className="text-center font-bold">Topomap of the component</p>
+          { props.ic.images ?
+            <img src={props.ic.images.img_topomap} alt=""/> : <div></div>
+          }
+        </div>
+        <div className="w-full px-6 max-w-md">
+          <p className="text-center font-bold">Spectrum</p>
+          { props.ic.images ?
+            <img src={props.ic.images.img_spectrum} alt=""/> : <div></div>
+          }
+        </div>
+        <div className="w-full px-6 max-w-md">
+          <p className="text-center font-bold">Epochs image</p>
+          { props.ic.images ?
+            <img src={props.ic.images.img_epochs_image} alt=""/> : <div></div>
+          }
         </div>
       </div>
     </div>
