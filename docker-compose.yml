@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  back:
+    build: ./back
+    ports: 
+      - 8000:8000
+    env_file: ./back/.env
+    depends_on:
+      - postgres
+  nginx:
+    build: .
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    depends_on:
+      - back
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    env_file: ./postgres/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

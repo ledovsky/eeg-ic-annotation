@@ -6,7 +6,7 @@ import store from './store';
 const queryString = require('query-string')
 
 class Api {
-  url = 'http://localhost:8000/api/'
+  url = process.env.REACT_APP_API_URL + "/";
 
   async getList(path, params) {
     let response = await this.get(path, params)
