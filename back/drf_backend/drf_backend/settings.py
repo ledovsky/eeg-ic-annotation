@@ -165,7 +165,9 @@ TMP_DIR = join(BASE_DIR, 'tmp')
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'http://168.119.186.83:8080',
+    'http://168.119.186.83:80',
 ]
 
 REST_FRAMEWORK = {
