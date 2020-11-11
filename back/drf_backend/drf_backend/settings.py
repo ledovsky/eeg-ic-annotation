@@ -28,7 +28,7 @@ else:
     env = 'dev'
 
 if env == 'prod':
-    SECRET_KEY = '*udtpxl4zo*0cy204%@kkag)!hr(drh_uzljyrfjl(+fvwf$=#'
+    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 else:
     SECRET_KEY = '*udtpxl4zo*0cy204%@kkag)!hr(drh_uzljyrfjl(+fvwf$=#'
 
