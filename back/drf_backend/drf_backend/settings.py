@@ -158,7 +158,11 @@ USE_TZ = True
 STATIC_ROOT = join(BASE_DIR, 'static')
 STATIC_URL = '/api/static/'
 
-MEDIA_ROOT = join(BASE_DIR, 'media')
+if env == 'prod':
+    MEDIA_ROOT = '/django_media/media'
+else:
+    MEDIA_ROOT = join(BASE_DIR, 'media')
+
 MEDIA_URL = '/media/'
 
 TMP_DIR = join(BASE_DIR, 'tmp')

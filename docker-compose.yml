@@ -6,6 +6,8 @@ services:
     ports: 
       - 8000:8000
     env_file: ./back/.env
+    volumes:
+      - media_data:/django_media
     depends_on:
       - postgres
   nginx:
@@ -14,6 +16,7 @@ services:
       - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
+      - media_data:/django_media:ro
     depends_on:
       - back
   postgres:
@@ -26,3 +29,4 @@ services:
 
 volumes:
   postgres_data:
+  media_data:
