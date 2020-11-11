@@ -155,8 +155,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = join(BASE_DIR, 'static')
-STATIC_URL = '/api/static/'
+if env == 'prod':
+    STATIC_ROOT = '/django_static/api-static'
+else:
+    STATIC_ROOT = join(BASE_DIR, 'static')
+
+STATIC_URL = '/api-static/'
 
 if env == 'prod':
     MEDIA_ROOT = '/django_media/media'
