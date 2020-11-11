@@ -35,6 +35,8 @@ class ICAListSerializer(serializers.ModelSerializer):
 
     def get_is_annotated(self, obj):
         user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
         try:
             Annotation.objects.get(ic=obj.id, user=user)
             return True
@@ -43,6 +45,8 @@ class ICAListSerializer(serializers.ModelSerializer):
 
     def get_annotation(self, obj):
         user = self.context['request'].user
+        if not user.is_authenticated:
+            return {}
         try:
             annotation = Annotation.objects.get(ic=obj.id, user=user)
             return AnnotationSerializer(annotation).data
@@ -92,14 +96,16 @@ class DatasetSerializer(serializers.ModelSerializer):
         fields = ('id', 'short_name', 'full_name', 'stats')
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
+
+
 class AnnotationSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        many=False,
-        slug_field='username',
-        queryset=User.objects.all()
-    )
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Annotation
         fields = '__all__'
-        read_only_fields = ('user', )
+

@@ -65,12 +65,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'drf_backend.urls'
@@ -157,7 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_ROOT = join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = '/api/static/'
 
 MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -165,7 +164,8 @@ MEDIA_URL = '/media/'
 TMP_DIR = join(BASE_DIR, 'tmp')
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://localhost:8080'
 ]
 
 REST_FRAMEWORK = {
@@ -173,6 +173,5 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication'
-
     ]
 }

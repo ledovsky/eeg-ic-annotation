@@ -98,7 +98,7 @@ class ICAImages(models.Model):
 
 class Annotation(models.Model):
     ic = models.ForeignKey(ICAComponent, models.PROTECT, null=False)
-    user = models.ForeignKey(User, models.PROTECT, null=False)
+    user = models.ForeignKey(User, models.PROTECT)
     flag_brain = models.BooleanField(default=False)
     flag_eyes = models.BooleanField(default=False)
     flag_muscles = models.BooleanField(default=False)

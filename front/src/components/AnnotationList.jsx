@@ -6,7 +6,7 @@ import Check from '../common/Check';
 function AnnotationList (props) {
   const rows = props.annotations.map((a) =>
     <tr key={a.id.toString()}>
-      <td className="border px-4 py-2">{a.user}</td>
+      <td className="border px-4 py-2">{a.user.first_name} {a.user.last_name}</td>
       <td className="border px-4 py-2"></td>
       <td className="border px-4 py-2"> <Check flag={a.flag_brain} /> </td>
       <td className="border px-4 py-2"> <Check flag={a.flag_eyes} /> </td>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import ComponentAnnotation from '../components/ComponentAnnotation'
-import Api from '../api'
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import ComponentAnnotation from '../components/ComponentAnnotation';
+import Api from '../api';
 
 
 function ComponentAnnotationContainer( props ) {
@@ -18,41 +18,40 @@ function ComponentAnnotationContainer( props ) {
     flag_line_noise: false,
     flag_ch_noise: false,
     comment: ''
-  })
+  });
 
-  const [ ic, setIc ] = useState({})
+  const [ ic, setIc ] = useState({});
 
   useEffect(async () => {
     let _ic = await Api.getJson(`ic/${ic_id}`, {})
     if (_ic.id) {
-      setIc(_ic)
+      setIc(_ic);
     }
     let _annotation = await Api.getJson('user-annotation', { ic_id: ic_id })
     if (_annotation.id) {
-      setAnnotation(_annotation)
+      setAnnotation(_annotation);
     }
   }, []);
 
   function handleInputChange (e) {
-      const {name, value} = e.target;
-      setAnnotation({...annotation, [name]: value});
+      const {name, checked} = e.target;
+      setAnnotation({...annotation, [name]: checked});
   }
 
   async function submit () {
-    console.log(annotation);
-    console.log(ic);
+    let response;
     if (annotation.id) {
-      let _annotation = await Api.put(`annotations/${annotation.id}`, annotation)
-      setAnnotation(_annotation)
+      response = await Api.patch(`annotations/${annotation.id}`, annotation);
     } else {
-      let _annotation = await Api.post(`annotations`, annotation)
-      setAnnotation(_annotation)
+      response = await Api.post(`annotations`, annotation);
+    }
+    if (response.ok) {
+      setAnnotation(await response.json());
     }
   }
 
-
   return (
-    <ComponentAnnotation ic={ic} onChange={handleInputChange} onSubmit={submit} ic={ic}/>    
+    <ComponentAnnotation ic={ic} onChange={handleInputChange} annotation={annotation} onSubmit={submit} ic={ic}/>    
   )
 }
 

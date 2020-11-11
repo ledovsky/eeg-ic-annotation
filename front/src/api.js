@@ -54,7 +54,7 @@ class Api {
       headers: this.getHeaders(),
       body: JSON.stringify(data)
     })
-    return this.handleErrors(response, {})
+    return this.handleErrors(response, {});
   }
 
   async handleErrors(response) {
