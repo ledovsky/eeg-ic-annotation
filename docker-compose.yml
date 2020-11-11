@@ -11,7 +11,7 @@ services:
   nginx:
     build: .
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
     depends_on:

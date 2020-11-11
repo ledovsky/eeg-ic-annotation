@@ -31,6 +31,7 @@ if env == 'prod':
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 else:
     SECRET_KEY = '*udtpxl4zo*0cy204%@kkag)!hr(drh_uzljyrfjl(+fvwf$=#'
+    DEBUG = True
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,9 +41,8 @@ else:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['168.119.186.83']
+ALLOWED_HOSTS = ['168.119.186.83', 'localhost']
 
 
 # Application definition
