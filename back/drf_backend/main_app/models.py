@@ -96,9 +96,32 @@ class ICAImages(models.Model):
             ic_img.run_img_build()
 
 
+class ICALinks(models.Model):
+    ic = models.OneToOneField(ICAComponent, null=False, on_delete=models.CASCADE, related_name='links')
+    prev = models.OneToOneField(ICAComponent, null=True, on_delete=models.SET_NULL, related_name='link_from_next')
+    next = models.OneToOneField(ICAComponent, null=True, on_delete=models.SET_NULL, related_name='link_from_prev')
+
+    @staticmethod
+    def update_links(dataset_short_name):
+        ics = ICAComponent.objects.filter(dataset__short_name=dataset_short_name).order_by('subject', 'name')
+        prev = None
+        for ic in ics:
+            if not hasattr(ic, 'links'):
+                links = ICALinks(ic=ic)
+                links.save()
+            if prev is not None:
+                links = ic.links
+                links.prev = prev
+                links.save()
+                links = prev.links
+                links.next = ic
+                links.save()
+            prev = ic
+
+
 class Annotation(models.Model):
     ic = models.ForeignKey(ICAComponent, models.PROTECT, null=False)
-    user = models.ForeignKey(User, models.PROTECT)
+    user = models.ForeignKey(User, models.PROTECT, null=True)
     flag_brain = models.BooleanField(default=False)
     flag_eyes = models.BooleanField(default=False)
     flag_muscles = models.BooleanField(default=False)

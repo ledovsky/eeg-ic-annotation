@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.views import View
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 from rest_framework.parsers import JSONParser, FileUploadParser
 from rest_framework import mixins
@@ -11,13 +12,13 @@ from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter
 from rest_framework import status
-from rest_framework.exceptions import NotFound
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import ICAListSerializer, ICADetailedSerializer, DatasetSerializer, AnnotationSerializer
-from .models import ICAComponent, Dataset, Annotation
+from .models import ICAComponent, Dataset, Annotation, ICAImages, ICALinks
 
 
 class APIRootView(APIView):
@@ -29,14 +30,16 @@ class APIRootView(APIView):
             'user-annotation': reverse('user-annotation', request=request) + '?ic_id=1',
             'annotations-list': reverse('annotations-list', request=request),
             'annotations': reverse('annotations', request=request, args=[0]),
-            'auth': reverse('auth', request=request)
+            'auth': reverse('auth', request=request),
+            'dataset-lock': reverse('dataset-lock', request=request, args=[2]),
+            'dataset-unlock': reverse('dataset-unlock', request=request, args=[2]),
         }
         return Response(data)
 
 
 class ICAListView(generics.ListCreateAPIView):
     serializer_class = ICAListSerializer
-    queryset = ICAComponent.objects.all()
+    queryset = ICAComponent.objects.all().order_by('subject', 'name')
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['dataset']
     search_fields = ['name', 'subject']
@@ -63,9 +66,47 @@ class DatasetListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class ResetDatasetView(View):
-    def get(self, request):
-        pass
+class DatasetOperationsBaseView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get_object(self, pk):
+        try:
+            return Dataset.objects.get(pk=pk)
+        except Dataset.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        dataset = self.get_object(pk)
+        self.do_work(dataset)
+        return Response({'status': 'ok'})
+
+
+
+    def do_work(self, dataset):
+        raise NotImplementedError
+
+
+class ResetDatasetView(DatasetOperationsBaseView):
+    def do_work(self, dataset):
+        if dataset.locked:
+            raise ValidationError(f'dataset {dataset.short_name} is locked')
+        annotations = Annotation.objects.filter(ic__dataset=dataset)
+        if len(annotations):
+            raise ValidationError('Dataset has annotations. Cant reset')
+        ics = ICAComponent.objects.filter(dataset=dataset).delete()
+
+
+class LockDatasetView(DatasetOperationsBaseView):
+    def do_work(self, dataset):
+        dataset.locked = True
+        dataset.save()
+        ICAImages.update_images(dataset.short_name)
+        ICALinks.update_links(dataset.short_name)
+
+class UnlockDatasetView(DatasetOperationsBaseView):
+    def do_work(self, dataset):
+        dataset.locked = False
+        dataset.save()
 
 
 class UserAnnotationView(generics.RetrieveAPIView):
@@ -104,5 +145,3 @@ class AnnotationDetailedView(generics.RetrieveUpdateAPIView):
 
 class UserView(generics.RetrieveAPIView):
     pass
-
-

@@ -10,6 +10,9 @@ urlpatterns = [
     path('annotations', views.AnnotationListView.as_view(), name='annotations-list'),
     path('annotations/<int:pk>', views.AnnotationDetailedView.as_view(), name='annotations'),
     path('datasets', views.DatasetListView.as_view(), name='dataset-list'),
+    path('datasets/lock/<int:pk>', views.LockDatasetView.as_view(), name='dataset-lock'),
+    path('datasets/unlock/<int:pk>', views.UnlockDatasetView.as_view(), name='dataset-unlock'),
+    path('datasets/reset/<int:pk>', views.ResetDatasetView.as_view(), name='dataset-unlock'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import ICAComponent, Dataset, DatasetStats, Annotation, ICAImages
+from .models import ICAComponent, Dataset, DatasetStats, Annotation, ICAImages, ICALinks
 
 
 class ICAListSerializer(serializers.ModelSerializer):
@@ -60,6 +60,12 @@ class ICAImagesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ICALinksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ICALinks
+        fields = '__all__'
+
+
 class ICADetailedSerializer(serializers.ModelSerializer):
     dataset = serializers.SlugRelatedField(
         many=False,
@@ -67,6 +73,7 @@ class ICADetailedSerializer(serializers.ModelSerializer):
         queryset=Dataset.objects.all()
     )
     images = ICAImagesSerializer()
+    links = ICALinksSerializer()
 
     class Meta:
         model = ICAComponent
@@ -76,10 +83,12 @@ class ICADetailedSerializer(serializers.ModelSerializer):
                   'dataset',
                   'sfreq',
                   'images',
+                  'links',
                   'ica_weights',
                   'ica_data',
                   'uploaded_by',
-                  'uploaded_at')
+                  'uploaded_at',
+                  )
 
 
 class DatasetStatsSerializer(serializers.ModelSerializer):
