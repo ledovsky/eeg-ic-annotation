@@ -67,16 +67,19 @@ class ICAImages(models.Model):
         fig = plot_topomap(df_weights['value'].values, df_weights['ch_name'].values)
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        fig.close()
         self.img_topomap.save('topomap.png', ContentFile(buf.getvalue()))
 
         fig = plot_spectrum(df_data, self.ic.sfreq)
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        fig.close()
         self.img_spectrum.save('spectrum.png', ContentFile(buf.getvalue()))
 
         fig = plot_epochs_image(df_data)
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
+        fig.close()
         self.img_epochs_image.save('epochs_image.png', ContentFile(buf.getvalue()))
 
         self.save()
