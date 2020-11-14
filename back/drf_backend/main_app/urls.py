@@ -13,6 +13,7 @@ urlpatterns = [
     path('datasets/lock/<int:pk>', views.LockDatasetView.as_view(), name='dataset-lock'),
     path('datasets/unlock/<int:pk>', views.UnlockDatasetView.as_view(), name='dataset-unlock'),
     path('datasets/reset/<int:pk>', views.ResetDatasetView.as_view(), name='dataset-unlock'),
+    path('test-long-request', views.TestLongRequestView.as_view(), name='test-long-request'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

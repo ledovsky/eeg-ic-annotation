@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+
 from .serializers import ICAListSerializer, ICADetailedSerializer, DatasetSerializer, AnnotationSerializer
 from .models import ICAComponent, Dataset, Annotation, ICAImages, ICALinks
 
@@ -143,5 +144,11 @@ class AnnotationDetailedView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class UserView(generics.RetrieveAPIView):
-    pass
+class TestLongRequestView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        import time
+        for i in range(8):
+            time.sleep(10)
+        return Response({'status': 'ok'})
