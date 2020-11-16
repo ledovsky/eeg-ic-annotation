@@ -3,8 +3,8 @@ function AnnotationBar (props) {
     <div className="mx-6 flex">
       <p className="text-indigo-500 hover:text-indigo-600">
         <a href="/datasets">Datasets</a><span> / </span>
-        <a href={`/datasets/${props.ic.dataset}`}>Dataset 1</a><span> / </span>
-        <a href={`/datasets/${props.ic.dataset}`}>Subject 1</a><span> / </span>
+        <a href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</a><span> / </span>
+        <a href={`/datasets/${props.dataset.id}`}>{props.ic.subject}</a><span> / </span>
         <a href="">{props.ic.name}</a>
       </p>
       { props.state == 'annotation' ?

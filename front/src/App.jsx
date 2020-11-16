@@ -26,7 +26,7 @@ function App() {
             <Route exact path="/datasets">
               <Datasets />
             </Route>
-            <Route exact path="/datasets/:dataset_name">
+            <Route exact path="/datasets/:dataset_id">
               <DatasetView />
             </Route>
             <Route exact path="/ic/:ic_id/" component={AnnotationList} />

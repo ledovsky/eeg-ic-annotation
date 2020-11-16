@@ -17,7 +17,7 @@ function CheckboxField( props ) {
 function ComponentAnnotation( props ) {
   return (
     <div>
-      <AnnotationBar ic={props.ic} state="annotation"/>
+      <AnnotationBar ic={props.ic} dataset={props.dataset} state="annotation"/>
       <div className="mx-6 mt-6 flex">
         <div className="w-full max-w-sm">
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

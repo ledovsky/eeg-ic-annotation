@@ -2,7 +2,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import ICAComponent, Dataset, DatasetStats, Annotation, ICAImages, ICALinks
+from auth_app.serializers import UserSerializer
+from data_app.models import Dataset, ICAComponent
+# from data_app.serializers import AnnotationSerializer
+from .models import DatasetStats, Annotation, ICAImages, ICALinks
 
 
 class ICAListSerializer(serializers.ModelSerializer):
@@ -23,15 +26,12 @@ class ICAListSerializer(serializers.ModelSerializer):
                   'subject',
                   'dataset',
                   'sfreq',
-                  'ica_weights',
-                  'ica_data',
                   'uploaded_by',
                   'uploaded_at',
                   'annotation',
                   'is_annotated')
 
         read_only_fields = ('uploaded_by', 'uploaded_at', 'is_annotated', 'annotation')
-        extra_kwargs = {'ica_weights': {'write_only': True}, 'ica_data': {'write_only': True}}
 
     def get_is_annotated(self, obj):
         user = self.context['request'].user
@@ -49,7 +49,7 @@ class ICAListSerializer(serializers.ModelSerializer):
             return {}
         try:
             annotation = Annotation.objects.get(ic=obj.id, user=user)
-            return AnnotationSerializer(annotation).data
+            return AnnotationListSerializer(annotation).data
         except ObjectDoesNotExist:
             return {}
 
@@ -66,12 +66,21 @@ class ICALinksSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class DatasetStatsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DatasetStats
+        fields = ('dataset', 'n_components', 'agreement')
+
+
+class DatasetDetailedSerializer(serializers.ModelSerializer):
+    stats = DatasetStatsSerializer(read_only=True)
+    class Meta:
+        model = Dataset
+        fields = ('id', 'short_name', 'full_name', 'stats')
+
+
 class ICADetailedSerializer(serializers.ModelSerializer):
-    dataset = serializers.SlugRelatedField(
-        many=False,
-        slug_field='short_name',
-        queryset=Dataset.objects.all()
-    )
+    # data_obj = ICADataSerializer()
     images = ICAImagesSerializer()
     links = ICALinksSerializer()
 
@@ -84,37 +93,21 @@ class ICADetailedSerializer(serializers.ModelSerializer):
                   'sfreq',
                   'images',
                   'links',
-                  'ica_weights',
-                  'ica_data',
+                  # 'data_obj',
                   'uploaded_by',
                   'uploaded_at',
                   )
 
-
-class DatasetStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DatasetStats
-        fields = ('dataset', 'n_components', 'agreement')
-
-
-class DatasetSerializer(serializers.ModelSerializer):
-
-    stats = DatasetStatsSerializer(read_only=True)
-    class Meta:
-        model = Dataset
-        fields = ('id', 'short_name', 'full_name', 'stats')
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     data['data'] = data.pop('data_obj')
+    #     return data
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name')
 
-
-class AnnotationSerializer(serializers.ModelSerializer):
+class AnnotationListSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = Annotation
         fields = '__all__'
-

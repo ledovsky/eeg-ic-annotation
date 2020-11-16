@@ -11,46 +11,49 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.filters import SearchFilter
-from rest_framework import status
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-from .serializers import ICAListSerializer, ICADetailedSerializer, DatasetSerializer, AnnotationSerializer
+from data_app.views import DatasetOperationsBaseView
+from .serializers import ICAListSerializer, ICADetailedSerializer, DatasetDetailedSerializer, AnnotationListSerializer
 from .models import ICAComponent, Dataset, Annotation, ICAImages, ICALinks
 
 
 class APIRootView(APIView):
     def get(self, request):
         data = {
-            'ic-list': reverse('ic-list', request=request),
-            'ic': reverse('ic', request=request, args=[0]),
-            'datasets': reverse('dataset-list', request=request),
-            'user-annotation': reverse('user-annotation', request=request) + '?ic_id=1',
-            'annotations-list': reverse('annotations-list', request=request),
-            'annotations': reverse('annotations', request=request, args=[0]),
+
+            ### auth_app
             'auth': reverse('auth', request=request),
-            'dataset-lock': reverse('dataset-lock', request=request, args=[2]),
-            'dataset-unlock': reverse('dataset-unlock', request=request, args=[2]),
+
+            ### data_app
+            'data-ic': reverse('data-ic', request=request),
+            'data-dataset-reset': reverse('data-dataset-reset', request=request, args=[1]),
+            'data-dataset-lock': reverse('data-dataset-lock', request=request, args=[1]),
+            'data-dataset-unlock': reverse('data-dataset-unlock', request=request, args=[1]),
+            'data-user-annotation-by-ic': reverse('data-user-annotation-by-ic', request=request, args=[1]),
+
+            ## main_app
+            'view-ic-list': reverse('view-ic-list', request=request),
+            'view-ic': reverse('view-ic', request=request, args=[1]),
+            'view-annotations-list': reverse('view-annotations-list', request=request),
+            'view-datasets-list': reverse('view-datasets-list', request=request),
+            'view-datasets-retrieve': reverse('view-datasets-retrieve', request=request, args=[1]),
+            'view-datasets-recalc': reverse('view-datasets-recalc', request=request, args=[1]),
         }
         return Response(data)
 
 
-class ICAListView(generics.ListCreateAPIView):
+class ICAListView(generics.ListAPIView):
     serializer_class = ICAListSerializer
     queryset = ICAComponent.objects.all().order_by('subject', 'name')
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['dataset']
     search_fields = ['name', 'subject']
     permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        user = None
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        serializer.save(uploaded_by=user)
 
 
 class ICADetailedView(generics.RetrieveAPIView):
@@ -60,10 +63,14 @@ class ICADetailedView(generics.RetrieveAPIView):
 
 
 class DatasetListView(generics.ListAPIView):
-    serializer_class = DatasetSerializer
+    serializer_class = DatasetDetailedSerializer
     queryset = Dataset.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['short_name']
+    permission_classes = [IsAuthenticated]
+
+
+class DatasetRetrieveView(generics.RetrieveAPIView):
+    serializer_class = DatasetDetailedSerializer
+    queryset = Dataset.objects.all()
     permission_classes = [IsAuthenticated]
 
 
@@ -81,74 +88,18 @@ class DatasetOperationsBaseView(APIView):
         self.do_work(dataset)
         return Response({'status': 'ok'})
 
-
-
     def do_work(self, dataset):
         raise NotImplementedError
 
 
-class ResetDatasetView(DatasetOperationsBaseView):
+class DatasetRecalcView(DatasetOperationsBaseView):
     def do_work(self, dataset):
-        if dataset.locked:
-            raise ValidationError(f'dataset {dataset.short_name} is locked')
-        annotations = Annotation.objects.filter(ic__dataset=dataset)
-        if len(annotations):
-            raise ValidationError('Dataset has annotations. Cant reset')
-        ics = ICAComponent.objects.filter(dataset=dataset).delete()
-
-
-class LockDatasetView(DatasetOperationsBaseView):
-    def do_work(self, dataset):
-        dataset.locked = True
-        dataset.save()
         ICAImages.update_images(dataset.short_name)
         ICALinks.update_links(dataset.short_name)
 
-class UnlockDatasetView(DatasetOperationsBaseView):
-    def do_work(self, dataset):
-        dataset.locked = False
-        dataset.save()
-
-
-class UserAnnotationView(generics.RetrieveAPIView):
-    serializer_class = AnnotationSerializer
-    queryset = Annotation.objects.all()
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        if ('ic_id' not in self.request.query_params):
-            raise NotFound()
-
-        ic_id = int(self.request.query_params['ic_id'])
-
-        try:
-            annotation = Annotation.objects.get(user=self.request.user, ic=ic_id)
-            return annotation
-        except ObjectDoesNotExist:
-            return None
-
 
 class AnnotationListView(generics.ListCreateAPIView):
-    serializer_class = AnnotationSerializer
+    serializer_class = AnnotationListSerializer
     queryset = Annotation.objects.all()
     filterset_fields = ['ic_id']
     permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class AnnotationDetailedView(generics.RetrieveUpdateAPIView):
-    serializer_class = AnnotationSerializer
-    queryset = Annotation.objects.all()
-    permission_classes = [IsAuthenticated]
-
-
-class TestLongRequestView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def get(self, request):
-        import time
-        for i in range(8):
-            time.sleep(10)
-        return Response({'status': 'ok'})

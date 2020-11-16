@@ -19,7 +19,7 @@ function AnnotationList (props) {
   // const rows = []
   return (
     <React.Fragment>
-      <AnnotationBar ic={props.ic} state="list"/>
+      <AnnotationBar ic={props.ic} dataset={props.dataset} state="list"/>
       <div className="ml-6">
         <p className="text-4xl">ICs </p>
         <table className="table-auto">

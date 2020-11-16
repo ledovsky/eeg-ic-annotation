@@ -8,9 +8,6 @@ function ComponentAnnotationContainer( props ) {
 
   const { ic_id } = useParams();
   const [ annotation, setAnnotation ] = useState({
-    id: null,
-    ic: ic_id,
-    user: null,
     flag_brain: false,
     flag_eyes: false,
     flag_muscles: false,
@@ -21,13 +18,18 @@ function ComponentAnnotationContainer( props ) {
   });
 
   const [ ic, setIc ] = useState({});
+  const [ dataset, setDataset ] = useState({});
 
   useEffect(async () => {
-    let _ic = await Api.getJson(`ic/${ic_id}`, {})
+
+    let _ic = await Api.getJson(`view/ic/${ic_id}`);
     if (_ic.id) {
       setIc(_ic);
+      let _dataset = await Api.getJson(`view/datasets/${_ic.dataset}`);
+      setDataset(_dataset);
     }
-    let _annotation = await Api.getJson('user-annotation', { ic_id: ic_id })
+
+    let _annotation = await Api.getJson(`data/user-annotation-by-ic/${ic_id}`);
     if (_annotation.id) {
       setAnnotation(_annotation);
     }
@@ -40,18 +42,14 @@ function ComponentAnnotationContainer( props ) {
 
   async function submit () {
     let response;
-    if (annotation.id) {
-      response = await Api.patch(`annotations/${annotation.id}`, annotation);
-    } else {
-      response = await Api.post(`annotations`, annotation);
-    }
+    response = await Api.post(`data/user-annotation-by-ic/${ic_id}`, annotation);
     if (response.ok) {
       setAnnotation(await response.json());
     }
   }
 
   return (
-    <ComponentAnnotation ic={ic} onChange={handleInputChange} annotation={annotation} onSubmit={submit} ic={ic}/>    
+    <ComponentAnnotation ic={ic} dataset={dataset} onChange={handleInputChange} annotation={annotation} onSubmit={submit}/>    
   )
 }
 

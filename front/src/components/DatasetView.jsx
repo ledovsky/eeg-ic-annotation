@@ -17,8 +17,11 @@ function DatasetView (props) {
   );
   return (
     <div className="ml-6">
-      <p className="text-4xl">ICs </p>
-      <table className="table-auto">
+      <p className="text-indigo-500 hover:text-indigo-600">
+        <a href="/datasets">Datasets</a><span> / </span>
+        <a href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</a><span> / </span>
+      </p>
+      <table className="table-auto mt-6">
         <thead>
           <tr>
             <th className="px-4 py-2">Subject</th>
