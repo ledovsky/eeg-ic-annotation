@@ -1,7 +1,7 @@
 import { React } from 'react';
 import AnnotationBar from './AnnotationBar';
 import Button from '../common/Button';
-import Plot from 'react-plotly.js';
+import ComponentsPlot from './ComponentsPlot';
 
 
 function CheckboxField( props ) {
@@ -61,12 +61,16 @@ function ComponentAnnotation( props ) {
             <div className="w-full">
                 <p className="text-center font-bold">Components plot</p>
                 { props.ic.images ?
-                  <Plot 
+                  // <Plot 
+                  //   data={props.ic.images.img_sources_plot.data}
+                  //   layout={props.ic.images.img_sources_plot.layout}
+                  //   style={{width: "100%"}}
+                  //   useResizeHandler={true}
+                  //   config={{displayModeBar: false}}
+                  // /> : <div></div>
+                  <ComponentsPlot
                     data={props.ic.images.img_sources_plot.data}
                     layout={props.ic.images.img_sources_plot.layout}
-                    style={{width: "100%"}}
-                    useResizeHandler={true}
-                    config={{displayModeBar: false}}
                   /> : <div></div>
                 }
           </div>

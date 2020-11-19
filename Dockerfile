@@ -1,4 +1,4 @@
-FROM node:10-alpine as builder
+FROM node:14-alpine as builder
 
 # install and cache app dependencies
 COPY front/package.json front/package-lock.json ./
