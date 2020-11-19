@@ -3,6 +3,7 @@ import warnings
 import mne
 import numpy as np
 import matplotlib.pyplot as plt
+from plotly import graph_objects as go
 
 
 def _get_epochs_from_df(ica_data):
@@ -137,5 +138,48 @@ def plot_spectrum(ica_data, sfreq):
     ylim = spec_ax.get_ylim()
     air = np.diff(ylim)[0] * 0.1
     spec_ax.set_ylim(ylim[0] - air, ylim[1] + air)
+
+    return fig
+
+
+def plot_sources(ics, sfreq):
+    fig = go.Figure()
+
+    fig.update_layout({'showlegend': False})
+
+    fig.update_layout({
+        'margin': {
+            'l': 100,
+            'r': 20,
+            'b': 10,
+            't': 10,
+            'pad': 4
+        }
+    })
+
+    step = 1 / len(ics)
+
+    fig.update_layout({f'xaxis': go.layout.XAxis({
+        'position': 0
+    })})
+
+    for ic_idx, col_name in enumerate(ics.keys()):
+        time = np.arange(len(ics[col_name]['value'])) / sfreq
+        fig.update_layout({f'yaxis{ic_idx + 1}': go.layout.YAxis({
+            'domain': [1 - (ic_idx + 1) * step, 1 - ic_idx * step],
+            'showticklabels': False,
+            'zeroline': False,
+        })})
+
+        fig.add_trace(
+            go.Scatter(x=time, y=ics[col_name]['value'], yaxis=f'y{ic_idx + 1}',
+                       line=dict(color='royalblue', width=1))
+        )
+
+        fig.add_annotation(x=-0.06, y=0,
+                           xref='paper', yref=f'y{ic_idx + 1}',
+                           text=col_name,
+                           showarrow=False,
+                           yshift=0)
 
     return fig

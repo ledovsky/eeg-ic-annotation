@@ -1,6 +1,7 @@
 import { React } from 'react';
 import AnnotationBar from './AnnotationBar';
 import Button from '../common/Button';
+import Plot from 'react-plotly.js';
 
 
 function CheckboxField( props ) {
@@ -35,24 +36,44 @@ function ComponentAnnotation( props ) {
             </div>
           </form>
         </div>
-        <div className="w-full px-6 max-w-md">
-          <p className="text-center font-bold">Topomap of the component</p>
-          { props.ic.images ?
-            <img src={props.ic.images.img_topomap} alt=""/> : <div></div>
-          }
+        <div className="w-full">
+          <div className="flex">
+            <div className="w-full px-6 max-w-md">
+              <p className="text-center font-bold">Topomap of the component</p>
+              { props.ic.images ?
+                <img src={props.ic.images.img_topomap} alt=""/> : <div></div>
+              }
+            </div>
+            <div className="w-full px-6 max-w-md">
+              <p className="text-center font-bold">Spectrum</p>
+              { props.ic.images ?
+                <img src={props.ic.images.img_spectrum} alt=""/> : <div></div>
+              }
+            </div>
+            <div className="w-full px-6 max-w-md">
+              <p className="text-center font-bold">Epochs image</p>
+              { props.ic.images ?
+                <img src={props.ic.images.img_epochs_image} alt=""/> : <div></div>
+              }
+            </div>
+          </div>
+          <div className="flex">
+            <div className="w-full">
+                <p className="text-center font-bold">Components plot</p>
+                { props.ic.images ?
+                  <Plot 
+                    data={props.ic.images.img_sources_plot.data}
+                    layout={props.ic.images.img_sources_plot.layout}
+                    style={{width: "100%"}}
+                    useResizeHandler={true}
+                    config={{displayModeBar: false}}
+                  /> : <div></div>
+                }
+          </div>
         </div>
-        <div className="w-full px-6 max-w-md">
-          <p className="text-center font-bold">Spectrum</p>
-          { props.ic.images ?
-            <img src={props.ic.images.img_spectrum} alt=""/> : <div></div>
-          }
+
         </div>
-        <div className="w-full px-6 max-w-md">
-          <p className="text-center font-bold">Epochs image</p>
-          { props.ic.images ?
-            <img src={props.ic.images.img_epochs_image} alt=""/> : <div></div>
-          }
-        </div>
+
       </div>
     </div>
   )

@@ -1,11 +1,13 @@
 import io
+import json
+from collections import OrderedDict
 
 import matplotlib.pyplot as plt
 
 from django.db import models
 from django.core.files.base import ContentFile
 
-from main_app.vis import plot_topomap, plot_epochs_image, plot_spectrum
+from main_app.vis import plot_topomap, plot_epochs_image, plot_spectrum, plot_sources
 
 from data_app.models import Dataset, ICAComponent, Annotation
 
@@ -15,6 +17,7 @@ class ICAImages(models.Model):
     img_topomap = models.ImageField(upload_to='images/', null=True)
     img_spectrum = models.ImageField(upload_to='images/', null=True)
     img_epochs_image = models.ImageField(upload_to='images/', null=True)
+    img_sources_plot = models.JSONField(null=True)
 
     def run_img_build(self):
         df_weights = self.ic.get_ica_weights()
@@ -36,6 +39,27 @@ class ICAImages(models.Model):
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
         plt.close(fig)
         self.img_epochs_image.save('epochs_image.png', ContentFile(buf.getvalue()))
+
+        ic_objs = (
+            ICAComponent
+                .objects
+                .filter(dataset=self.ic.dataset, subject=self.ic.subject)
+                .order_by('name')
+        )
+        ics = OrderedDict()
+        for ic_obj in ic_objs:
+            ica_data = ic_obj.data_obj.ica_data.copy()
+            sfreq = ic_obj.sfreq
+            while sfreq > 100:
+                sfreq /= 2
+                ica_data['value'] = ica_data['value'][::2]
+                ica_data['epoch'] = ica_data['epoch'][::2]
+            ica_data['value'] = ica_data['value'][:1000]
+            ica_data['epoch'] = ica_data['epoch'][:1000]
+            ics[ic_obj.name] = ica_data
+
+        fig = plot_sources(ics, sfreq)
+        self.img_sources_plot = json.loads(fig.to_json())
 
         self.save()
 
