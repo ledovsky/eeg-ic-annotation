@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 
 from main_app.vis import plot_topomap, plot_epochs_image, plot_spectrum, plot_sources
 
-from data_app.models import Dataset, ICAComponent, Annotation
+from data_app.models import Dataset, ICAComponent, Annotation, ICAData
 
 
 class ICAImages(models.Model):
@@ -48,7 +48,9 @@ class ICAImages(models.Model):
         )
         ics = OrderedDict()
         for ic_obj in ic_objs:
-            ica_data = ic_obj.data_obj.ica_data.copy()
+            ica_data_obj = ICAData.objects.get(ic=ic_obj)
+            ica_data = ica_data_obj.ica_data.copy()
+            del ica_data_obj
             sfreq = ic_obj.sfreq
             while sfreq > 100:
                 sfreq /= 2
