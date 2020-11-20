@@ -101,9 +101,7 @@ def plot_spectrum(ica_data, sfreq):
         return psd_ylabel, psds_mean, spectrum_std
 
 
-    def set_title_and_labels(ax, title, xlab, ylab):
-        if title:
-            ax.set_title(title)
+    def set_title_and_labels(ax, xlab, ylab):
         if xlab:
             ax.set_xlabel(xlab)
         if ylab:
@@ -135,7 +133,7 @@ def plot_spectrum(ica_data, sfreq):
                              psds_mean + spectrum_std[1],
                              color='k', alpha=.2)
 
-    set_title_and_labels(spec_ax, 'Spectrum', 'Frequency (Hz)', psd_ylabel)
+    set_title_and_labels(spec_ax, 'Frequency (Hz)', psd_ylabel)
     spec_ax.yaxis.labelpad = 0
     spec_ax.set_xlim(freqs[[0, -1]])
     ylim = spec_ax.get_ylim()
