@@ -35,10 +35,10 @@ class ICAComponent(models.Model):
         unique_together = ('name', 'subject', 'dataset')
 
     def get_ica_weights(self):
-        return pd.DataFrame(self.data_obj.ica_weights)
+        return pd.DataFrame(ICAData.objects.get(ic=self).ica_weights)
 
     def get_ica_data(self):
-        return pd.DataFrame(self.data_obj.ica_data)
+        return pd.DataFrame(ICAData.objects.get(ic=self).ica_data)
 
 
 class Annotation(models.Model):
