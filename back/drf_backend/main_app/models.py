@@ -19,9 +19,10 @@ class ICAImages(models.Model):
     img_epochs_image = models.ImageField(upload_to='images/', null=True)
     img_sources_plot = models.JSONField(null=True)
 
-    def run_img_build(self):
+    def build_plots(self):
         df_weights = self.ic.get_ica_weights()
         df_data = self.ic.get_ica_data()
+
         fig = plot_topomap(df_weights['value'].values, df_weights['ch_name'].values)
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
@@ -34,11 +35,15 @@ class ICAImages(models.Model):
         plt.close(fig)
         self.img_spectrum.save('spectrum.png', ContentFile(buf.getvalue()))
 
-        fig = plot_epochs_image(df_data)
+        fig = plot_epochs_image(df_data, self.ic.sfreq)
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=200, bbox_inches='tight', transparent=True)
         plt.close(fig)
         self.img_epochs_image.save('epochs_image.png', ContentFile(buf.getvalue()))
+
+        self.save()
+
+    def build_component_plots(self):
 
         ic_objs = (
             ICAComponent
@@ -66,7 +71,7 @@ class ICAImages(models.Model):
         self.save()
 
     @staticmethod
-    def update_images(dataset_short_name=None):
+    def update_plots(dataset_short_name=None):
         ics = ICAComponent.objects.all()
         if dataset_short_name:
             ics = ics.filter(dataset__short_name=dataset_short_name)
@@ -77,7 +82,21 @@ class ICAImages(models.Model):
                 ic_img.save()
             else:
                 ic_img = ic.images
-            ic_img.run_img_build()
+            ic_img.build_plots()
+
+    @staticmethod
+    def update_component_plots(dataset_short_name=None):
+        ics = ICAComponent.objects.all()
+        if dataset_short_name:
+            ics = ics.filter(dataset__short_name=dataset_short_name)
+
+        for ic in ics:
+            if not hasattr(ic, 'images'):
+                ic_img = ICAImages(ic=ic)
+                ic_img.save()
+            else:
+                ic_img = ic.images
+            ic_img.build_component_plots()
 
 
 class ICALinks(models.Model):

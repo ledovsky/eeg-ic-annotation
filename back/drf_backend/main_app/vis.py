@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from plotly import graph_objects as go
 
 
-def _get_epochs_from_df(ica_data):
+def _get_epochs_from_df(ica_data, sfreq):
     epochs = ica_data['epoch'].unique()
     n_epochs = len(epochs)
     counts = ica_data['epoch'].value_counts().values
@@ -18,14 +18,14 @@ def _get_epochs_from_df(ica_data):
     for idx, epoch in enumerate(epochs):
         np_data[idx, 0, :] = ica_data[ica_data['epoch'] == epoch]['value'].values
 
-    info = mne.io.meas_info.create_info(['ICA000'], sfreq=160, ch_types="misc")
+    info = mne.io.meas_info.create_info(['ICA000'], sfreq=sfreq, ch_types="misc")
     epochs_from_df = mne.EpochsArray(np_data, info)
 
     return epochs_from_df
 
 
-def plot_epochs_image(ica_data):
-    epochs_from_df = _get_epochs_from_df(ica_data)
+def plot_epochs_image(ica_data, sfreq):
+    epochs_from_df = _get_epochs_from_df(ica_data, sfreq)
     return mne.viz.epochs.plot_epochs_image(epochs_from_df, picks=[0], title="",
                                             combine=None, colorbar=False, show=False)[0]
 
@@ -110,7 +110,7 @@ def plot_spectrum(ica_data, sfreq):
         ax.tick_params('both', labelsize=8)
         ax.axis('tight')
 
-    epochs_from_df = _get_epochs_from_df(ica_data)
+    epochs_from_df = _get_epochs_from_df(ica_data, sfreq)
 
     # Params
     Nyquist = sfreq / 2.
@@ -119,6 +119,7 @@ def plot_spectrum(ica_data, sfreq):
     num_std = 1
     psd_args = {}
     psd_args['fmax'] = Nyquist
+
 
     psds, freqs = mne.time_frequency.psd_multitaper(epochs_from_df, picks=[0], **psd_args)
     psd_ylabel, psds_mean, spectrum_std = _get_psd_label_and_std(
