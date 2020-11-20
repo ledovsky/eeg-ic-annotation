@@ -19,6 +19,8 @@ def _get_epochs_from_df(ica_data, sfreq):
         np_data[idx, 0, :] = ica_data[ica_data['epoch'] == epoch]['value'].values
 
     info = mne.io.meas_info.create_info(['ICA000'], sfreq=sfreq, ch_types="misc")
+
+    print(info)
     epochs_from_df = mne.EpochsArray(np_data, info)
 
     return epochs_from_df
@@ -118,7 +120,7 @@ def plot_spectrum(ica_data, sfreq):
     plot_std = True
     num_std = 1
     psd_args = {}
-    psd_args['fmax'] = Nyquist
+    psd_args['fmax'] = 75
 
 
     psds, freqs = mne.time_frequency.psd_multitaper(epochs_from_df, picks=[0], **psd_args)
