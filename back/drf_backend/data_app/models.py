@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 
 from django.contrib.auth.models import User
@@ -18,8 +19,8 @@ class Dataset(models.Model):
 
 
 class ICAData(models.Model):
-    ica_weights = models.JSONField()
-    ica_data = models.JSONField()
+    ica_weights = models.TextField()
+    ica_data = models.TextField()
 
 
 class ICAComponent(models.Model):
@@ -35,10 +36,10 @@ class ICAComponent(models.Model):
         unique_together = ('name', 'subject', 'dataset')
 
     def get_ica_weights(self):
-        return pd.DataFrame(ICAData.objects.get(ic=self).ica_weights)
+        return pd.DataFrame(json.loads(ICAData.objects.get(ic=self).ica_weights))
 
     def get_ica_data(self):
-        return pd.DataFrame(ICAData.objects.get(ic=self).ica_data)
+        return pd.DataFrame(json.loads(ICAData.objects.get(ic=self).ica_data))
 
 
 class Annotation(models.Model):

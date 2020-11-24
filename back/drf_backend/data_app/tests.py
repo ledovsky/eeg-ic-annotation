@@ -10,6 +10,7 @@ from rest_framework import status
 from django.apps import apps
 
 from .models import Dataset, ICAComponent
+from django.contrib.auth.models import User
 
 
 app_path = apps.get_app_config('data_app').path
@@ -18,6 +19,10 @@ app_path = apps.get_app_config('data_app').path
 class ICAViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client.login(username='testuser', password='12345')
         Dataset.objects.create(full_name='My Dataset', short_name='my_dataset')
 
     def test_create(self):
@@ -35,7 +40,7 @@ class ICAViewTest(TestCase):
             }
         }
 
-        response = self.client.post('/api/ic/create', data, format='json')
+        response = self.client.post('/api/data/ic', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         ic = ICAComponent.objects.get(id=response.data['id'])
         saved_ic_weights = ic.get_ica_weights()

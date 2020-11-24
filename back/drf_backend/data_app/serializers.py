@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from auth_app.serializers import UserSerializer
@@ -36,6 +38,8 @@ class ICACreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ica_data = validated_data.pop('data_obj')
+        ica_data['ica_weights'] = json.dumps(ica_data['ica_weights'])
+        ica_data['ica_data'] = json.dumps(ica_data['ica_data'])
         ica_data_obj = ICAData.objects.create(**ica_data)
         ic = ICAComponent.objects.create(data_obj=ica_data_obj, **validated_data)
         return ic
