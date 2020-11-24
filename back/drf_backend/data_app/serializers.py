@@ -6,10 +6,9 @@ from auth_app.serializers import UserSerializer
 from .models import Dataset, ICAComponent, ICAData, Annotation
 
 
-class ICADataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ICAData
-        fields = ('ica_data', 'ica_weights')
+class ICADataSerializer(serializers.Serializer):
+    ica_data = serializers.JSONField()
+    ica_weights = serializers.JSONField()
 
 
 class ICACreateSerializer(serializers.ModelSerializer):
