@@ -17,21 +17,22 @@ from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-print(os.environ)
 
 if 'DJANGO_ENVIRONMENT' in os.environ and os.environ['DJANGO_ENVIRONMENT'] == 'prod':
     env = 'prod'
 else:
     env = 'dev'
 
+
 if env == 'prod':
     SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 else:
     SECRET_KEY = '*udtpxl4zo*0cy204%@kkag)!hr(drh_uzljyrfjl(+fvwf$=#'
     DEBUG = True
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_filters',
+    # 'django_extensions',
     'data_app',
     'main_app',
     'auth_app'
@@ -101,7 +103,7 @@ if env == 'dev':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
+            'NAME': 'postgres_2',
             'USER': 'postgres',
             'PASSWORD': 'pwd',
             'HOST': '127.0.0.1',
@@ -186,3 +188,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication'
     ]
 }
+
+if env == 'prod':
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': '/logs/info.log',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'INFO',
+                'propagate': True,
+            },
+        },
+    }
