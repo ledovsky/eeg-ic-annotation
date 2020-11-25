@@ -54,7 +54,7 @@ class ICAImages(models.Model):
         ics = OrderedDict()
         for ic_obj in ic_objs:
             ica_data_obj = ICAData.objects.get(ic=ic_obj)
-            ica_data = ica_data_obj.ica_data.copy()
+            ica_data = json.loads(ica_data_obj.ica_data)
             del ica_data_obj
             sfreq = ic_obj.sfreq
             while sfreq > 100:
