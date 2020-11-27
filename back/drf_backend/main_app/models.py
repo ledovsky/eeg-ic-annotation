@@ -43,16 +43,18 @@ class ICAImages(models.Model):
 
         self.save()
 
-    def build_component_plots(self):
+    @staticmethod
+    def build_component_plots(dataset_short_name, subject):
 
         ic_objs = (
             ICAComponent
                 .objects
-                .filter(dataset=self.ic.dataset, subject=self.ic.subject)
+                .filter(dataset__short_name=dataset_short_name, subject=subject)
                 .order_by('name')
         )
+
         ics = OrderedDict()
-        for ic_obj in ic_objs:
+        for ic_obj in ic_objs.iterator(chunk_size=1):
             ica_data_obj = ICAData.objects.get(ic=ic_obj)
             ica_data = json.loads(ica_data_obj.ica_data)
             del ica_data_obj
@@ -66,9 +68,12 @@ class ICAImages(models.Model):
             ics[ic_obj.name] = ica_data
 
         fig = plot_sources(ics, sfreq)
-        self.img_sources_plot = json.loads(fig.to_json())
-
-        self.save()
+        for ic_obj in ic_objs.iterator(chunk_size=1):
+            if not hasattr(ic_obj, 'images'):
+                ic_img = ICAImages(ic=ic_obj)
+                ic_img.save()
+            ic_obj.images.img_sources_plot = json.loads(fig.to_json())
+            ic_obj.images.save()
 
     @staticmethod
     def update_plots(dataset_short_name=None):
@@ -86,17 +91,26 @@ class ICAImages(models.Model):
 
     @staticmethod
     def update_component_plots(dataset_short_name=None):
-        ics = ICAComponent.objects.all()
-        if dataset_short_name:
-            ics = ics.filter(dataset__short_name=dataset_short_name)
 
-        for ic in ics:
-            if not hasattr(ic, 'images'):
-                ic_img = ICAImages(ic=ic)
-                ic_img.save()
-            else:
-                ic_img = ic.images
-            ic_img.build_component_plots()
+        # TODO: need testing
+        if dataset_short_name is None:
+
+            raise NotImplementedError
+
+            query = Dataset.objects.all().values_list('short_name').distinct()
+            datasets = [item[0] for item in list(query)]
+            for dataset in datasets:
+                ICAImages.update_component_plots(dataset)
+            return
+
+        ics = ICAComponent.objects.filter(dataset__short_name=dataset_short_name)
+
+
+        query = ics.values_list('subject').distinct()
+        subjects = [item[0] for item in list(query)]
+
+        for subj in subjects:
+            ICAImages.build_component_plots(dataset_short_name, subj)
 
 
 class ICALinks(models.Model):

@@ -160,9 +160,10 @@ def plot_sources(ics, sfreq):
 
     step = 1 / len(ics)
 
-    fig.update_layout({f'xaxis': go.layout.XAxis({
-        'position': 0
-    })})
+    fig.update_layout({
+        'height': 40 * len(ics),
+        f'xaxis': go.layout.XAxis({'position': 0})
+    })
 
     for ic_idx, col_name in enumerate(ics.keys()):
         time = np.arange(len(ics[col_name]['value'])) / sfreq
