@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@tailwindcss/custom-forms": "^0.2.1",
+    "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.0.2",
     "plotly.js": "^1.57.1",
     "postcss": "^8.1.8",
