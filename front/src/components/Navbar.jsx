@@ -25,11 +25,15 @@ function Navbar(props) {
     <React.Fragment>
       <div className="py-5 px-2">
         <ul className="flex">
-          <NavbarItemMain>Skoltech/IHNA EEG ICA</NavbarItemMain>
+          <NavbarItemMain>ALICE Project</NavbarItemMain>
           <NavbarItem to="/" margin></NavbarItem>
+
+          { props.loggedIn ?
           <NavbarItem to="/datasets">Explore datasets</NavbarItem>
-          <NavbarItem to="/">About</NavbarItem>
-          <NavbarItem to="/">Downloads</NavbarItem>
+          : ''
+          }
+          {/* <NavbarItem to="/">About</NavbarItem>
+          <NavbarItem to="/">Downloads</NavbarItem> */}
           { props.loggedIn ?
             <NavbarItem key="logout" href="#" onClick={props.handleLogout}>{props.fullName}: Logout</NavbarItem>
 
