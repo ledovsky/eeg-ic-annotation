@@ -26,6 +26,8 @@ function ComponentAnnotation( props ) {
               <p className="font-bold">Select IC classes</p>
             </div>
             <CheckboxField name="flag_brain" onChange={props.onChange} checked={props.annotation.flag_brain}>Brain</CheckboxField>
+            <CheckboxField name="flag_mu" onChange={props.onChange} checked={props.annotation.flag_mu}>Mu rhythm</CheckboxField>
+            <CheckboxField name="flag_alpha" onChange={props.onChange} checked={props.annotation.flag_alpha}>Alpha rhythm</CheckboxField>
             <CheckboxField name="flag_eyes" onChange={props.onChange} checked={props.annotation.flag_eyes}>Eyes</CheckboxField>
             <CheckboxField name="flag_eyes_h" onChange={props.onChange} checked={props.annotation.flag_eyes_h}>Eyes Horizontal</CheckboxField>
             <CheckboxField name="flag_eyes_v" onChange={props.onChange} checked={props.annotation.flag_eyes_v}>Eyes Vertical</CheckboxField>

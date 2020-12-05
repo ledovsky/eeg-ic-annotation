@@ -5,6 +5,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.0.2",
+    "moment": "^2.29.1",
     "plotly.js": "^1.57.1",
     "postcss": "^8.1.8",
     "query-string": "^6.13.7",
