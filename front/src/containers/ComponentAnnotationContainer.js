@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ComponentAnnotation from '../components/ComponentAnnotation';
@@ -10,10 +11,16 @@ function ComponentAnnotationContainer( props ) {
   const [ annotation, setAnnotation ] = useState({
     flag_brain: false,
     flag_eyes: false,
+    flag_eyes_h: false,
+    flag_eyes_v: false,
     flag_muscles: false,
     flag_heart: false,
     flag_line_noise: false,
     flag_ch_noise: false,
+    flag_uncertain: false,
+    flag_other: false,
+    flag_mu: false,
+    flag_alpha: false,
     comment: ''
   });
 
@@ -40,16 +47,21 @@ function ComponentAnnotationContainer( props ) {
       setAnnotation({...annotation, [name]: checked});
   }
 
+  function handleCommentFieldChange (e) {
+      setAnnotation({...annotation, ['comment']: e.target.value});
+  }
+
   async function submit () {
     let response;
     response = await Api.post(`data/user-annotation-by-ic/${ic_id}`, annotation);
     if (response.ok) {
       setAnnotation(await response.json());
+      toast.success('Сохранено')
     }
   }
 
   return (
-    <ComponentAnnotation ic={ic} dataset={dataset} onChange={handleInputChange} annotation={annotation} onSubmit={submit}/>    
+    <ComponentAnnotation ic={ic} dataset={dataset} onChange={handleInputChange} onCommentFieldChange={handleCommentFieldChange} annotation={annotation} onSubmit={submit}/>    
   )
 }
 

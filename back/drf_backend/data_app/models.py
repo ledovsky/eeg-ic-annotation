@@ -47,10 +47,16 @@ class Annotation(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     flag_brain = models.BooleanField(default=False)
     flag_eyes = models.BooleanField(default=False)
+    flag_eyes_h = models.BooleanField(default=False)
+    flag_eyes_v = models.BooleanField(default=False)
     flag_muscles = models.BooleanField(default=False)
     flag_heart = models.BooleanField(default=False)
     flag_line_noise = models.BooleanField(default=False)
     flag_ch_noise = models.BooleanField(default=False)
+    flag_uncertain = models.BooleanField(default=False)
+    flag_other = models.BooleanField(default=False)
+    flag_mu = models.BooleanField(default=False)
+    flag_alpha = models.BooleanField(default=False)
     comment = models.TextField(default='', blank=True)
 
     class Meta:
