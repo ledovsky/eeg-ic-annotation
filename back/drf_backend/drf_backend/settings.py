@@ -103,7 +103,7 @@ if env == 'dev':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres_2',
+            'NAME': 'postgres',
             'USER': 'postgres',
             'PASSWORD': 'pwd',
             'HOST': '127.0.0.1',
