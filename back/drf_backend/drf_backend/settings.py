@@ -174,6 +174,11 @@ MEDIA_URL = '/media/'
 
 TMP_DIR = join(BASE_DIR, 'tmp')
 
+if env == 'prod':
+    OUT_DIR = '/django_out'
+else:
+    OUT_DIR = join(BASE_DIR, 'out')
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8080',

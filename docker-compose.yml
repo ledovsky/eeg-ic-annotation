@@ -9,6 +9,7 @@ services:
     volumes:
       - media_data:/django_media
       - static_data:/django_static
+      - ./out:/django_out
     depends_on:
       - postgres
   nginx:
