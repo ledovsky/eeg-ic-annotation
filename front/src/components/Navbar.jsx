@@ -32,8 +32,7 @@ function Navbar(props) {
           <NavbarItem to="/datasets">Explore datasets</NavbarItem>
           : ''
           }
-          {/* <NavbarItem to="/">About</NavbarItem>
-          <NavbarItem to="/">Downloads</NavbarItem> */}
+          <NavbarItem to="/downloads">Downloads</NavbarItem>
           { props.loggedIn ?
             <NavbarItem key="logout" href="#" onClick={props.handleLogout}>{props.fullName}: Logout</NavbarItem>
 

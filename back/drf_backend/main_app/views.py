@@ -35,6 +35,7 @@ class APIRootView(APIView):
             'data-dataset-lock': reverse('data-dataset-lock', request=request, args=[1]),
             'data-dataset-unlock': reverse('data-dataset-unlock', request=request, args=[1]),
             'data-user-annotation-by-ic': reverse('data-user-annotation-by-ic', request=request, args=[1]),
+            'downloads-actual': reverse('downloads-actual', request=request),
 
             ## main_app
             'view-ic-list': reverse('view-ic-list', request=request),

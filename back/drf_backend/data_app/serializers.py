@@ -2,7 +2,6 @@ import json
 
 from rest_framework import serializers
 
-from auth_app.serializers import UserSerializer
 from .models import Dataset, ICAComponent, ICAData, Annotation
 
 
@@ -50,3 +49,9 @@ class UserAnnotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Annotation
         fields = '__all__'
+
+
+class DatasetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dataset
+        fields = ('id', 'short_name', 'full_name', 'description')

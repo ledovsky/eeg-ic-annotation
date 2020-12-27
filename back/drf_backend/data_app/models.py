@@ -8,6 +8,7 @@ from django.db import models
 class Dataset(models.Model):
     short_name = models.CharField(max_length=20, unique=True)
     full_name = models.CharField(max_length=128)
+    description = models.TextField(default='No description available')
     locked = models.BooleanField(unique=False, default=False)
 
     def reset(self):
@@ -61,4 +62,3 @@ class Annotation(models.Model):
 
     class Meta:
         unique_together = ('ic', 'user', )
-
