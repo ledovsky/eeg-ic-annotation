@@ -3,8 +3,7 @@ version: "3"
 services:
   back:
     build: ./back
-    ports: 
-      - 8000:8000
+    network_mode: host
     env_file: ./back/.env
     volumes:
       - media_data:/django_media
@@ -12,8 +11,7 @@ services:
       - ./out:/django_out
   nginx:
     build: .
-    ports:
-      - 80:80
+    network_mode: host
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
       - media_data:/django_media:ro
