@@ -119,7 +119,7 @@ else:
             'USER': 'postgres',
             'PASSWORD': os.environ['DJANGO_POSTGRES_PASSWORD'],
             'HOST': os.environ['DJANGO_POSTGRES_HOST'],
-            'PORT': '5432',
+            'PORT': os.environ['DJANGO_POSTGRES_PORT'],
         }
     }
 
