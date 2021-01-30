@@ -10,7 +10,7 @@ function NavbarItemMain(props) {
 function NavbarItem(props) {
   return (
     <li className={`mr-6 ${props.margin ? 'ml-auto' : ''}`}>
-      <a className="text-gray-700 hover:text-gray-800" href={`${props.to}`} onClick={props.onClick}>{props.children}</a>
+      <a className="text-gray-700 hover:text-gray-900" href={`${props.to}`} onClick={props.onClick}>{props.children}</a>
     </li>
   )
 }
@@ -32,6 +32,7 @@ function Navbar(props) {
           <NavbarItem to="/datasets">Explore datasets</NavbarItem>
           : ''
           }
+          <NavbarItem to="/docs">Documentation</NavbarItem>
           <NavbarItem to="/downloads">Downloads</NavbarItem>
           { props.loggedIn ?
             <NavbarItem key="logout" href="#" onClick={props.handleLogout}>{props.fullName}: Logout</NavbarItem>
