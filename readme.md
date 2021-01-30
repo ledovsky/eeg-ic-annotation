@@ -16,3 +16,5 @@ docker run -p 5432:5432 -d -e POSTGRES_PASSWORD=pwd postgres
 ```
 docker run -p 5434:5432 -d --env-file postgres/.env -v postgres_data:/var/lib/postgresql/data postgres
 ```
+
+
