@@ -3,34 +3,39 @@ version: "3"
 services:
   back:
     build: ./back
-    ports: 
+    networks:
+        - alice-network
+    ports:
       - 8000:8000
     env_file: ./back/.env
     volumes:
-      - media_data:/django_media
-      - static_data:/django_static
-      - ./out:/django_out
+      - $MEDIA_DATA:/django_media
+      - $STATIC_DATA:/django_static
+      - $OUT_DATA:/django_out
     depends_on:
       - postgres
   nginx:
     build: .
+    networks:
+        - alice-network
     ports:
       - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
-      - media_data:/django_media:ro
-      - static_data:/django_static:ro
+      - $MEDIA_DATA:/django_media:ro
+      - $STATIC_DATA:/django_static:ro
     depends_on:
       - back
   postgres:
     image: postgres:latest
+    networks:
+        - alice-network
     ports:
       - 5433:5432
     env_file: ./postgres/.env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - $POSTGRES_DATA:/var/lib/postgresql/data
 
-volumes:
-  postgres_data:
-  media_data:
-  static_data:
+networks:
+    alice-network:
+        external: true
