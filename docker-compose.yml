@@ -10,6 +10,8 @@ services:
       - media_data:/django_media
       - static_data:/django_static
       - ./out:/django_out
+    depends_on:
+      - postgres
   nginx:
     build: .
     ports:
@@ -20,7 +22,15 @@ services:
       - static_data:/django_static:ro
     depends_on:
       - back
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5433:5432
+    env_file: ./postgres/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
+  postgres_data:
   media_data:
   static_data:
