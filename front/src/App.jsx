@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { ToastContainer } from 'react-toastify';
 
 import HomePage from './components/HomePage';
+import DocsPage from './components/DocsPage';
 import Login from './containers/LoginContainer';
 import Navbar from './containers/NavbarContainer';
 import Footer from './components/Footer';
@@ -32,6 +33,7 @@ function App() {
               <DatasetView />
             </Route>
             <Route exact path="/downloads" component={Downloads} />
+            <Route path="/docs" component={DocsPage} />
             <Route exact path="/ic/:ic_id/" component={AnnotationList} />
             <Route exact path="/ic/:ic_id/annotate" component={ComponentAnnotation} />
             <Route exact path="/404">
