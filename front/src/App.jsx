@@ -33,7 +33,7 @@ function App() {
               <DatasetView />
             </Route>
             <Route exact path="/downloads" component={Downloads} />
-            <Route exact path="/docs" component={DocsPage} />
+            <Route path="/docs" component={DocsPage} />
             <Route exact path="/ic/:ic_id/" component={AnnotationList} />
             <Route exact path="/ic/:ic_id/annotate" component={ComponentAnnotation} />
             <Route exact path="/404">
