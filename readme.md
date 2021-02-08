@@ -23,9 +23,9 @@ docker exec -it eeg-ic-annotation_back_1 /bin/bash
 # then inside the container
 cd drf_backend
 python manage.py init_dev_db
-python manage.py update_component_plots
-python manage.py update_links
-python manage.py update_plots
+python manage.py update_component_plots --dataset test_dataset
+python manage.py update_links --dataset test_dataset
+python manage.py update_plots --dataset test_dataset
 ```
 
 
