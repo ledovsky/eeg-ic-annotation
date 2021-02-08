@@ -15,7 +15,18 @@ docker-compose build
 docker-compose up -d
 ```
 
-Set up dev db (optional)
+Set up .env files.
+
+```
+cp back/.env.sample back/.env
+cp postgres/.env.sample postgres/.env
+```
+
+For production change secret key in back/.env and postgres password in postgres/.env.
+
+### For development
+
+Set up dev db
 
 ```
 docker exec -it eeg-ic-annotation_back_1 /bin/bash
@@ -27,6 +38,8 @@ python manage.py update_component_plots --dataset test_dataset
 python manage.py update_links --dataset test_dataset
 python manage.py update_plots --dataset test_dataset
 ```
+
+You can login as admin/admin
 
 
 ## Db dump
