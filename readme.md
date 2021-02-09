@@ -8,13 +8,6 @@ Create a docker network if not created
 docker network create alice-network
 ```
 
-Build and run docker-compose. You need at least 8 Gb RAM for the build
-
-```
-docker-compose build
-docker-compose up -d
-```
-
 Set up .env files.
 
 ```
@@ -26,7 +19,7 @@ For production change secret key in back/.env and postgres password in postgres/
 
 ### First start up
 
-If you havn't already, build the image
+Build docker-compose. You need at least 8 Gb RAM for the build
 
 ```
 docker-compose build
@@ -61,9 +54,7 @@ docker-compose up -d
 ```
 
 
-### For development
-
-Set up dev db
+### Set up dev db
 
 ```
 docker exec -it eeg-ic-annotation_back_1 /bin/bash
@@ -78,6 +69,11 @@ python manage.py update_plots --dataset test_dataset
 
 You can login as admin/admin
 
+## How to set up prod
+
+Set up proper .env files
+
+TODO - adding admin user
 
 ## Db dump
 
