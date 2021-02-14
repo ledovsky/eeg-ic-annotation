@@ -221,6 +221,7 @@ def plot_sources(ics, sfreq):
         'margin': {
             't': 10,
             'b': 10,
+            'r': 10,
         },
     })
 
