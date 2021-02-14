@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from '../common/Link';
+import ExternalLink from '../common/ExternalLink';
 
 function HomePage (props) {
   return (
@@ -9,8 +9,8 @@ function HomePage (props) {
         <p className="mt-10">The project aims to develop a sustainable algorithm for EEG IC artifact removal and collect a publically available dataset</p>
         <p className="mt-10">Developed in</p>
         <ul className="list-disc ml-10">
-          <li className="mt-3"> <Link href="https://www.skoltech.ru/en">Skolkovo Institute of Science and Technology </Link></li>
-          <li className="mt-3"> <Link href="https://www.ihna.ru/en/">Institute of Higher Nervous Activity and Neurophysiology of Russian Academy of Science</Link></li>
+          <li className="mt-3"> <ExternalLink href="https://www.skoltech.ru/en">Skolkovo Institute of Science and Technology </ExternalLink></li>
+          <li className="mt-3"> <ExternalLink href="https://www.ihna.ru/en/">Institute of Higher Nervous Activity and Neurophysiology of Russian Academy of Science</ExternalLink></li>
         </ul>
       </div>
       <div className="col-span-1">

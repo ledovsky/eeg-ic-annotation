@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom';
+
 import GeneralAbout from '../docs/GeneralAbout';
 import GeneralSharing from '../docs/GeneralSharing';
 import GeneralContribute from '../docs/GeneralContribute';
@@ -15,7 +16,7 @@ function SidebarItem (props) {
 function SidebarSubItem (props) {
   return (
     <p className="pt-3">
-      <a className="text-gray-700 hover:text-gray-900 hover:font-bold" href={props.url}>{props.children}</a>
+      <Link className="text-gray-700 hover:text-gray-900 hover:font-bold" to={props.url}>{props.children}</Link>
     </p>
   )
 }
@@ -34,16 +35,14 @@ function DocsPage (props) {
         <SidebarItem>Dataset Guide</SidebarItem>
       </div>
       <div className="col-span-3 px-10 mt-6">
-        <Router>
-          <Switch>
-            <Route exact path="/docs/">
-              <Redirect to="/docs/about"/>
-            </Route>
-            <Route path="/docs/about" component={GeneralAbout} />
-            <Route path="/docs/sharing-policy" component={GeneralSharing} />
-            <Route path="/docs/contribute" component={GeneralContribute} />
-          </Switch>
-        </Router>
+        <Switch>
+          <Route exact path="/docs/">
+            <Redirect to="/docs/about"/>
+          </Route>
+          <Route path="/docs/about" component={GeneralAbout} />
+          <Route path="/docs/sharing-policy" component={GeneralSharing} />
+          <Route path="/docs/contribute" component={GeneralContribute} />
+        </Switch>
 
       </div>
     </div>

@@ -14,31 +14,29 @@ import AnnotationList from './containers/AnnotationListContainer';
 import Downloads from './containers/DownloadsContainer';
 import NotFound from './components/NotFound';
 
+import LoggedInActions from './containers/LoggedInActionsContainer';
+
 
 function App() {
+
+  console.log("App component");
+
   return (
     <React.Fragment>
+      <LoggedInActions />
       <div className="flex-auto">
         <Router>
           <Navbar />
           <Switch>
             <Route exact path="/" component={HomePage} />
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/datasets">
-              <Datasets />
-            </Route>
-            <Route exact path="/datasets/:dataset_id">
-              <DatasetView />
-            </Route>
+            <Route path="/login" component={Login} />
+            <Route exact path="/datasets" component={Datasets} />
+            <Route exact path="/datasets/:dataset_id" component={DatasetView} />
             <Route exact path="/downloads" component={Downloads} />
             <Route path="/docs" component={DocsPage} />
             <Route exact path="/ic/:ic_id/" component={AnnotationList} />
             <Route exact path="/ic/:ic_id/annotate" component={ComponentAnnotation} />
-            <Route exact path="/404">
-              <NotFound />
-            </Route>
+            <Route exact path="/404" component={NotFound} />
             <Redirect to="/404" />
           </Switch>
         </Router>

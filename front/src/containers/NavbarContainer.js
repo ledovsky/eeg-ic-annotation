@@ -6,7 +6,7 @@ import { logout } from '../actions/authActions'
 
 function NavbarContainer (props) {
   let history = useHistory();
-  const { auth } = useSelector(state => state);
+  const auth = useSelector(state => state.auth);
 
   function handleLogout (e) {
     e.preventDefault();

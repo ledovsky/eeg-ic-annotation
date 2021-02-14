@@ -1,16 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 
 function NavbarItemMain(props) {
   return (
     <li className="ml-6">
-      <a className="text-indigo-500 hover:text-indigo-600 font-bold" href="/">{props.children}</a>
+      <Link className="text-indigo-500 hover:text-indigo-600 font-bold" to="/">{props.children}</Link>
     </li>
   )
 }
 function NavbarItem(props) {
   return (
     <li className={`mr-6 ${props.margin ? 'ml-auto' : ''}`}>
-      <a className="text-gray-700 hover:text-gray-900" href={`${props.to}`} onClick={props.onClick}>{props.children}</a>
+      <Link className="text-gray-700 hover:text-gray-900" to={`${props.to}`} onClick={props.onClick}>{props.children}</Link>
     </li>
   )
 }
