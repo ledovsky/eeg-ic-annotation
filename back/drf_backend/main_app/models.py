@@ -54,18 +54,29 @@ class ICAImages(models.Model):
         )
 
         ics = OrderedDict()
+
+        sfreq = None
         for ic_obj in ic_objs.iterator(chunk_size=1):
             ica_data_obj = ICAData.objects.get(ic=ic_obj)
             ica_data = json.loads(ica_data_obj.ica_data)
-            del ica_data_obj
             sfreq = ic_obj.sfreq
-            while sfreq > 100:
+            del ica_data_obj
+
+            # select 30 seconds
+            n_points_to_take = int(sfreq * 0.5)
+            ica_data['value'] = ica_data['value'][:n_points_to_take]
+            ica_data['epoch'] = ica_data['epoch'][:n_points_to_take]
+
+            # lower resulotion to 60-120Hz
+            while sfreq >= 120:
                 sfreq /= 2
                 ica_data['value'] = ica_data['value'][::2]
                 ica_data['epoch'] = ica_data['epoch'][::2]
-            ica_data['value'] = ica_data['value'][:1000]
-            ica_data['epoch'] = ica_data['epoch'][:1000]
+
             ics[ic_obj.name] = ica_data
+
+        if len(ics) == 0:
+            raise RuntimeError('No ics in dataset')
 
         fig = plot_sources(ics, sfreq)
         for ic_obj in ic_objs.iterator(chunk_size=1):
