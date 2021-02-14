@@ -192,8 +192,7 @@ def plot_sources(ics, sfreq):
             'anchor': 'x',
             'domain': [ic_idx * step, (ic_idx + 1) * step],
             'showticklabels': False,
-            'zeroline': False,
-            'range': [-3, 3]
+            'zeroline': False
         }})
 
         fig.add_trace(
@@ -203,7 +202,8 @@ def plot_sources(ics, sfreq):
                 yaxis=f'y{ic_idx + 1}',
                 name=col_name,
                 mode='lines',
-                line=dict(color='royalblue', width=1)
+                line=dict(color='royalblue', width=1),
+                hovertemplate='IC value: %{y:.2f}<br>Time:%{x:.2f}',
             )
         )
 
@@ -216,7 +216,6 @@ def plot_sources(ics, sfreq):
     # Update layout
     fig.update_layout({
         'dragmode': 'zoom',
-        'hovermode': 'x',
         'height': 40 * n_ics,
         'template': 'plotly_white',
         'margin': {
