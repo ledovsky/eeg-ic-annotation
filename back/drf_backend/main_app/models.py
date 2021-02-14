@@ -62,8 +62,10 @@ class ICAImages(models.Model):
             sfreq = ic_obj.sfreq
             del ica_data_obj
 
+            import pdb; pdb.set_trace()
+
             # select 30 seconds
-            n_points_to_take = int(sfreq * 0.5)
+            n_points_to_take = int(sfreq * 30)
             ica_data['value'] = ica_data['value'][:n_points_to_take]
             ica_data['epoch'] = ica_data['epoch'][:n_points_to_take]
 
