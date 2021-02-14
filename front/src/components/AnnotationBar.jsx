@@ -1,26 +1,28 @@
+import Link from '../common/Link';
+
 function AnnotationBar (props) {
   return (
     <div className="mx-6 flex">
-      <p className="text-indigo-500 hover:text-indigo-600">
-        <a href="/datasets">Datasets</a><span> / </span>
-        <a href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</a><span> / </span>
-        <a href={`/datasets/${props.dataset.id}`}>{props.ic.subject}</a><span> / </span>
-        <a href="">{props.ic.name}</a>
+      <p>
+        <Link href="/datasets">Datasets</Link><span> / </span>
+        <Link href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</Link><span> / </span>
+        <Link href={`/datasets/${props.dataset.id}`}>{props.ic.subject}</Link><span> / </span>
+        <Link href="#">{props.ic.name}</Link>
       </p>
       { props.state == 'annotation' ?
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6"><a href={`/ic/${props.ic.id}`}>Annotations</a></p> : ''
+        <p className="ml-6"><Link href={`/ic/${props.ic.id}`}>Annotations</Link></p> : ''
       }
       { props.state == 'list' ?
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6"><a href={`/ic/${props.ic.id}/annotate`}>Annotate</a></p> : ''
+        <p className="ml-6"><Link href={`/ic/${props.ic.id}/annotate`}>Annotate</Link></p> : ''
       }
       { props.ic.links && props.ic.links.prev ?
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6">
-          <a href={`/ic/${props.ic.links.prev}${ props.state == 'annotation' ? '/annotate' : ''}`}>Previous</a></p> :
+        <p className="ml-6">
+          <Link href={`/ic/${props.ic.links.prev}${ props.state == 'annotation' ? '/annotate' : ''}`}>Previous</Link></p> :
         ''
       }
       { props.ic.links && props.ic.links.next ?
-        <p className="text-indigo-500 hover:text-indigo-600 ml-6">
-          <a href={`/ic/${props.ic.links.next}${ props.state == 'annotation' ? '/annotate' : ''}`}>Next</a></p> :
+        <p className="ml-6">
+          <Link href={`/ic/${props.ic.links.next}${ props.state == 'annotation' ? '/annotate' : ''}`}>Next</Link></p> :
         ''
       }
     </div>

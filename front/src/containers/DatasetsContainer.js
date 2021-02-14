@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Api from '../api'
-import Dataset from '../components/Datasets'
+import { useSelector } from 'react-redux';
+
+import Api from '../api';
+import Dataset from '../components/Datasets';
+
 
 function Datasets(props) {
 
-  const [ params, setParams ] = React.useState({})
-  const [ datasets, setDatasets ] = React.useState([])
+  const datasets = useSelector(store => store.datasets);
 
-  useEffect(async () => {
-    // Update the document title using the browser API      
-    let collection = await Api.getList('view/datasets/list', {})
-    setDatasets(collection)
-  }, [ params ]);
+  // useEffect(async () => {
+  //   // Update the document title using the browser API      
+  //   let collection = await Api.getList('view/datasets/list', {})
+  //   setDatasets(collection)
+  // }, [ params ]);
 
 
   return (

@@ -1,4 +1,6 @@
 import Check from '../common/Check';
+import Link from '../common/Link';
+import Spinner from '../common/Spinner';
 
 
 function DatasetView (props) {
@@ -23,11 +25,12 @@ function DatasetView (props) {
   );
   return (
     <div className="ml-6">
-      <p className="text-indigo-500 hover:text-indigo-600">
-        <a href="/datasets">Datasets</a><span> / </span>
-        <a href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</a><span> / </span>
-      </p>
-      <table className="table-auto mt-6">
+      <Link href="/datasets">Datasets</Link><span> / </span>
+      <Link href={`/datasets/${props.dataset.id}`}>{props.dataset.full_name}</Link><span> / </span>
+      <div className="mt-6 ml-6" hidden={!props.loading}>
+        <Spinner/>
+      </div>
+      <table className="table-auto mt-6" hidden={props.loading}>
         <thead>
           <tr>
             <th className="px-4 py-2">Subject</th>
