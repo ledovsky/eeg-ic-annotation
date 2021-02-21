@@ -18,10 +18,10 @@ function App() {
   return (
     <React.Fragment>
       <div className="flex-auto">
-        <Router>
+        <Router basename={`${process.env.PUBLIC_URL}`}>
           <Navbar />
           <Switch>
-            <Route exact path="/" component={HomePage} />
+            <Route path="/" component={HomePage} />
             <Route path="/login">
               <Login />
             </Route>

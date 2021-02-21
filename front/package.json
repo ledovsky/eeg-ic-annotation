@@ -2,6 +2,7 @@
   "name": "front",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/neuro/alice",
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.0.2",

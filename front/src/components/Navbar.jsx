@@ -26,10 +26,10 @@ function Navbar(props) {
       <div className="py-5 px-2">
         <ul className="flex">
           <NavbarItemMain>ALICE Project</NavbarItemMain>
-          <NavbarItem to="/" margin></NavbarItem>
+          <NavbarItem to={`${process.env.PUBLIC_URL}/`} margin></NavbarItem>
 
           { props.loggedIn ?
-          <NavbarItem to="/datasets">Explore datasets</NavbarItem>
+          <NavbarItem to={`${process.env.PUBLIC_URL}/datasets`}>Explore datasets</NavbarItem>
           : ''
           }
           <NavbarItem to="/downloads">Downloads</NavbarItem>
