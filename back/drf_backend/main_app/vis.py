@@ -4,6 +4,7 @@ import mne
 import numpy as np
 import matplotlib.pyplot as plt
 from plotly import graph_objects as go
+import plotly.express as px
 
 
 def _get_epochs_from_df(ica_data, sfreq):
@@ -144,38 +145,66 @@ def plot_spectrum(ica_data, sfreq):
 
 
 def plot_sources(ics, sfreq):
+    """
+    Inspired by https://plotly.com/python/range-slider/
+    """
+
+    palette = px.colors.qualitative.Plotly
+
+    # define time when epoch changes
+    epoch_change_time = []
+    for idx, epoch_id, epoch_id_prev in zip(
+            np.arange(len(ics['IC000']['epoch'])),
+            ics['IC000']['epoch'][1:],
+            ics['IC000']['epoch']):
+        if epoch_id != epoch_id_prev:
+            epoch_change_time.append(idx / sfreq)
+
     fig = go.Figure()
 
     fig.update_layout({'showlegend': False})
 
+    n_ics = len(ics)
+    step = 1 / n_ics
+
     fig.update_layout({
-        'margin': {
-            'l': 100,
-            'r': 20,
-            'b': 10,
-            't': 10,
-            'pad': 4
+        f'xaxis': {
+            'range': [0, 15],
+            'rangeslider': {
+                'visible': True,
+                'autorange': True
+            }
         }
     })
 
-    step = 1 / len(ics)
+    for t in epoch_change_time:
+        fig.add_shape(
+            type="line",
+            x0=t, x1=t, y0=0, y1=1,
+            xref='x',
+            yref=f'paper',
+            line=dict(color=palette[1], width=1.5))
 
-    fig.update_layout({
-        'height': 40 * len(ics),
-        f'xaxis': go.layout.XAxis({'position': 0})
-    })
-
-    for ic_idx, col_name in enumerate(ics.keys()):
+    for ic_idx, col_name in enumerate(reversed(ics.keys())):
         time = np.arange(len(ics[col_name]['value'])) / sfreq
-        fig.update_layout({f'yaxis{ic_idx + 1}': go.layout.YAxis({
-            'domain': [1 - (ic_idx + 1) * step, 1 - ic_idx * step],
+        axis_idx = ic_idx + 1
+        fig.update_layout({f'yaxis{axis_idx}': {
+            'anchor': 'x',
+            'domain': [ic_idx * step, (ic_idx + 1) * step],
             'showticklabels': False,
-            'zeroline': False,
-        })})
+            'zeroline': False
+        }})
 
         fig.add_trace(
-            go.Scatter(x=time, y=ics[col_name]['value'], yaxis=f'y{ic_idx + 1}',
-                       line=dict(color='royalblue', width=1))
+            go.Scatter(
+                x=time,
+                y=ics[col_name]['value'],
+                yaxis=f'y{ic_idx + 1}',
+                name=col_name,
+                mode='lines',
+                line=dict(color='royalblue', width=1),
+                hovertemplate='IC value: %{y:.2f}<br>Time:%{x:.2f}',
+            )
         )
 
         fig.add_annotation(x=-0.06, y=0,
@@ -183,5 +212,17 @@ def plot_sources(ics, sfreq):
                            text=col_name,
                            showarrow=False,
                            yshift=0)
+
+    # Update layout
+    fig.update_layout({
+        'dragmode': 'zoom',
+        'height': 40 * n_ics,
+        'template': 'plotly_white',
+        'margin': {
+            't': 10,
+            'b': 10,
+            'r': 10,
+        },
+    })
 
     return fig

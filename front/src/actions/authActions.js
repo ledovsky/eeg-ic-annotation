@@ -1,6 +1,6 @@
-import { toast } from 'react-toastify'
-import store from '../store'
-import api from '../api'
+import { toast } from 'react-toastify';
+import store from '../store';
+import api from '../api';
 
 
 export async function login(login, password){

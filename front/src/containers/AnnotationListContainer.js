@@ -20,7 +20,7 @@ function AnnotationListContainer (props) {
     }
     let _annotations = await Api.getList('view/annotations/list', { ic_id: ic_id })
     setAnnotations(_annotations)
-  }, []);
+  }, [ic_id]);
 
   return (
     <AnnotationList annotations={annotations} dataset={dataset} ic={ic}/>

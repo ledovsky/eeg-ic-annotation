@@ -1,16 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 
 function NavbarItemMain(props) {
   return (
     <li className="ml-6">
-      <a className="text-indigo-500 hover:text-indigo-600 font-bold" href="/">{props.children}</a>
+      <Link className="text-indigo-500 hover:text-indigo-600 font-bold" to="/">{props.children}</Link>
     </li>
   )
 }
 function NavbarItem(props) {
   return (
     <li className={`mr-6 ${props.margin ? 'ml-auto' : ''}`}>
-      <a className="text-gray-700 hover:text-gray-800" href={`${props.to}`} onClick={props.onClick}>{props.children}</a>
+      <Link className="text-gray-700 hover:text-gray-900" to={`${props.to}`} onClick={props.onClick}>{props.children}</Link>
     </li>
   )
 }
@@ -26,12 +28,13 @@ function Navbar(props) {
       <div className="py-5 px-2">
         <ul className="flex">
           <NavbarItemMain>ALICE Project</NavbarItemMain>
-          <NavbarItem to={`${process.env.PUBLIC_URL}/`} margin></NavbarItem>
+          <NavbarItem to="/" margin></NavbarItem>
 
           { props.loggedIn ?
-          <NavbarItem to={`${process.env.PUBLIC_URL}/datasets`}>Explore datasets</NavbarItem>
+          <NavbarItem to="/datasets">Explore datasets</NavbarItem>
           : ''
           }
+          <NavbarItem to="/docs">Documentation</NavbarItem>
           <NavbarItem to="/downloads">Downloads</NavbarItem>
           { props.loggedIn ?
             <NavbarItem key="logout" href="#" onClick={props.handleLogout}>{props.fullName}: Logout</NavbarItem>

@@ -24,11 +24,12 @@ function ComponentAnnotationContainer( props ) {
     comment: ''
   });
 
+  const [ loading, setLoading ] = useState(true);
   const [ ic, setIc ] = useState({});
   const [ dataset, setDataset ] = useState({});
 
   useEffect(async () => {
-
+    setLoading(true);
     let _ic = await Api.getJson(`view/ic/${ic_id}`);
     if (_ic.id) {
       setIc(_ic);
@@ -40,7 +41,8 @@ function ComponentAnnotationContainer( props ) {
     if (_annotation.id) {
       setAnnotation(_annotation);
     }
-  }, []);
+    setLoading(false);
+  }, [ic_id]);
 
   function handleInputChange (e) {
       const {name, checked} = e.target;
@@ -61,7 +63,9 @@ function ComponentAnnotationContainer( props ) {
   }
 
   return (
-    <ComponentAnnotation ic={ic} dataset={dataset} onChange={handleInputChange} onCommentFieldChange={handleCommentFieldChange} annotation={annotation} onSubmit={submit}/>    
+    <ComponentAnnotation 
+      ic={ic} dataset={dataset} onChange={handleInputChange} 
+      onCommentFieldChange={handleCommentFieldChange} annotation={annotation} onSubmit={submit} loading={loading}/>    
   )
 }
 
