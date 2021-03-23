@@ -3,22 +3,39 @@ version: "3"
 services:
   back:
     build: ./back
-    network_mode: host
+    networks:
+        - reverse-proxy
+    ports:
+      - 8094:8000
     env_file: ./back/.env
     volumes:
-      - media_data:/django_media
-      - static_data:/django_static
-      - ./out:/django_out
+      - ./django/media:/django_media
+      - ./django/static:/django_static
+      - ./django/out:/django_out
+    depends_on:
+      - postgres
   nginx:
     build: .
-    network_mode: host
+    networks:
+        - reverse-proxy
+    ports:
+      - 8095:80
     volumes:
-      - ./nginx:/etc/nginx/conf.d:ro
-      - media_data:/django_media:ro
-      - static_data:/django_static:ro
+      - ./nginx:/etc/nginx/conf.d
+      - ./django/media:/django_media:ro
+      - ./django/static:/django_static:ro
     depends_on:
       - back
+  postgres:
+    image: postgres:latest
+    networks:
+        - reverse-proxy
+    ports:
+      - 8096:5432
+    env_file: ./postgres/.env
+    volumes:
+      - ./django/postgres:/var/lib/postgresql/data
 
-volumes:
-  media_data:
-  static_data:
+networks:
+    reverse-proxy:
+        external: true
