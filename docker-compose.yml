@@ -21,7 +21,7 @@ services:
     ports:
       - 8095:80
     volumes:
-      - $HOME/nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d
       - $HOME/alice_volumes/media:/django_media:ro
       - $HOME/alice_volumes/static:/django_static:ro
     depends_on:
