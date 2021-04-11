@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-ro
 import GeneralAbout from '../docs/GeneralAbout';
 import GeneralSharing from '../docs/GeneralSharing';
 import GeneralContribute from '../docs/GeneralContribute';
+import DatasetsKids from '../docs/DatasetsKids';
+import DatasetsStructure from '../docs/DatasetsStructure';
 
 function SidebarItem (props) {
   return (
@@ -32,7 +34,9 @@ function DocsPage (props) {
         <SidebarSubItem url='/docs/contribute'>How to contribute</SidebarSubItem>
         <SidebarItem>Annotation Tool Guide</SidebarItem>
         {/* <SidebarSubItem>Getting started</SidebarSubItem> */}
-        <SidebarItem>Dataset Guide</SidebarItem>
+        <SidebarItem>Datasets</SidebarItem>
+        <SidebarSubItem url='/docs/datasets-structure'>Download files structure</SidebarSubItem>
+        <SidebarSubItem url='/docs/datasets-kids'>Kids Dataset</SidebarSubItem>
       </div>
       <div className="col-span-3 px-10 mt-6">
         <Switch>
@@ -42,6 +46,8 @@ function DocsPage (props) {
           <Route path="/docs/about" component={GeneralAbout} />
           <Route path="/docs/sharing-policy" component={GeneralSharing} />
           <Route path="/docs/contribute" component={GeneralContribute} />
+          <Route path="/docs/datasets-structure" component={DatasetsStructure} />
+          <Route path="/docs/datasets-kids" component={DatasetsKids} />
         </Switch>
 
       </div>
