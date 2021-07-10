@@ -10,6 +10,7 @@ class Dataset(models.Model):
     full_name = models.CharField(max_length=128)
     description = models.TextField(default='No description available')
     locked = models.BooleanField(unique=False, default=False)
+    annotation_version = models.CharField(max_length=128, choices=[('v1', 'v1'), ('v2', 'v2')], default='v1')
 
     def reset(self):
         if not self.locked:
@@ -48,10 +49,14 @@ class Annotation(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     flag_brain = models.BooleanField(default=False)
     flag_eyes = models.BooleanField(default=False)
+    flag_eyes_blinks = models.BooleanField(default=False)
     flag_eyes_h = models.BooleanField(default=False)
     flag_eyes_v = models.BooleanField(default=False)
+    flag_muscles_and_movement = models.BooleanField(default=False)
     flag_muscles = models.BooleanField(default=False)
+    flag_movement = models.BooleanField(default=False)
     flag_heart = models.BooleanField(default=False)
+    flag_noise = models.BooleanField(default=False)
     flag_line_noise = models.BooleanField(default=False)
     flag_ch_noise = models.BooleanField(default=False)
     flag_uncertain = models.BooleanField(default=False)

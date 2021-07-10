@@ -54,4 +54,4 @@ class UserAnnotationSerializer(serializers.ModelSerializer):
 class DatasetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dataset
-        fields = ('id', 'short_name', 'full_name', 'description')
+        fields = ('id', 'short_name', 'full_name', 'description', 'annotation_version')

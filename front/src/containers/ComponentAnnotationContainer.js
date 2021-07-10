@@ -10,17 +10,21 @@ function ComponentAnnotationContainer( props ) {
   const { ic_id } = useParams();
   const [ annotation, setAnnotation ] = useState({
     flag_brain: false,
+    flag_mu: false,
+    flag_alpha: false,
     flag_eyes: false,
+    flag_eyes_blinks: false,
     flag_eyes_h: false,
     flag_eyes_v: false,
+    flag_muscles_and_movement: false,
     flag_muscles: false,
+    flag_movement: false,
     flag_heart: false,
+    flag_noise: false,
     flag_line_noise: false,
     flag_ch_noise: false,
     flag_uncertain: false,
     flag_other: false,
-    flag_mu: false,
-    flag_alpha: false,
     comment: ''
   });
 
@@ -45,12 +49,17 @@ function ComponentAnnotationContainer( props ) {
   }, [ic_id]);
 
   function handleInputChange (e) {
-      const {name, checked} = e.target;
-      setAnnotation({...annotation, [name]: checked});
+    const {name, checked} = e.target;
+    setAnnotation({...annotation, [name]: checked});
+  }
+
+  function handleCheck (obj) {
+    console.log(obj);
+    setAnnotation({...annotation, ...obj});
   }
 
   function handleCommentFieldChange (e) {
-      setAnnotation({...annotation, ['comment']: e.target.value});
+    setAnnotation({...annotation, ['comment']: e.target.value});
   }
 
   async function submit () {
@@ -64,7 +73,7 @@ function ComponentAnnotationContainer( props ) {
 
   return (
     <ComponentAnnotation 
-      ic={ic} dataset={dataset} onChange={handleInputChange} 
+      ic={ic} dataset={dataset} onChange={handleInputChange} handleCheck={handleCheck}
       onCommentFieldChange={handleCommentFieldChange} annotation={annotation} onSubmit={submit} loading={loading}/>    
   )
 }

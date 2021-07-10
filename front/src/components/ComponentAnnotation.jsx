@@ -3,18 +3,9 @@ import AnnotationBar from './AnnotationBar';
 import Button from '../common/Button';
 import Spinner from '../common/Spinner';
 import ComponentsPlot from './ComponentsPlot';
+import AnnotationForm from './AnnotationForm';
+import AnnotationFormV2 from './AnnotationFormV2';
 
-
-function CheckboxField( props ) {
-  return (
-        <div className="flex mt-6">
-            <label className="flex items-center">
-              <input type="checkbox" className="form-checkbox" name={props.name} onChange={props.onChange} checked={props.checked}/>
-                <span className="ml-2">{props.children}</span>
-            </label>
-        </div>
-  )
-}
 
 function ComponentAnnotation( props ) {
   return (
@@ -27,7 +18,11 @@ function ComponentAnnotation( props ) {
       { !props.loading ? 
         <div className="mx-6 mt-6 flex">
         <div className="w-full max-w-sm">
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        { props.dataset.annotation_version === "v1" ? 
+        <AnnotationForm onChange={props.onChange} onSubmit={props.onSubmit} annotation={props.annotation} />
+        : <AnnotationFormV2 onSubmit={props.onSubmit} annotation={props.annotation} handleCheck={props.handleCheck}/>
+        }
+          {/* <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div className="flex">
               <p className="font-bold">Select IC classes</p>
             </div>
@@ -52,7 +47,7 @@ function ComponentAnnotation( props ) {
             <div className="flex mt-6">
               <Button onClick={props.onSubmit}>Save</Button>
             </div>
-          </form>
+          </form> */}
         </div>
         <div className="w-full">
           <div className="flex">
