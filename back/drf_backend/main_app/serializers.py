@@ -76,7 +76,7 @@ class DatasetDetailedSerializer(serializers.ModelSerializer):
     stats = DatasetStatsSerializer(read_only=True)
     class Meta:
         model = Dataset
-        fields = ('id', 'short_name', 'full_name', 'stats')
+        fields = ('id', 'short_name', 'full_name', 'annotation_version', 'stats')
 
 
 class ICADetailedSerializer(serializers.ModelSerializer):
