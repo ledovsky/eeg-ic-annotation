@@ -9,9 +9,9 @@ function AnnotationBar (props) {
         <Link href={`/datasets/${props.dataset.id}`}>{props.ic.subject}</Link><span> / </span>
         <Link href="#">{props.ic.name}</Link>
       </p>
-      { props.state == 'annotation' ?
+      {/* { props.state == 'annotation' ?
         <p className="ml-6"><Link href={`/ic/${props.ic.id}`}>Annotations</Link></p> : ''
-      }
+      } */}
       { props.state == 'list' ?
         <p className="ml-6"><Link href={`/ic/${props.ic.id}/annotate`}>Annotate</Link></p> : ''
       }
